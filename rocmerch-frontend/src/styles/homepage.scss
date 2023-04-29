@@ -1,0 +1,315 @@
+@font-face {
+  font-family: Raleway;
+  src: url(../assets/fonts/Raleway-Regular.ttf);
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Raleway;
+  src: url(../assets/fonts/Raleway-Bold.ttf);
+  font-weight: bold;
+  font-style: normal;
+}
+
+// ? ? ? ? ? ?
+// ? GLOBALS ?
+// ? ? ? ? ? ?
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  font-family: Raleway;
+  letter-spacing: 0.025em;
+}
+
+body {
+  margin: auto;
+}
+
+// ? ? ? ? ? ?
+// ? COLOURS ?
+// ? ? ? ? ? ?
+
+$main-dark: rgb(17, 17, 17);
+$main-dark-transparent: rgba(17, 17, 17, 0.472);
+$main-light: rgb(246, 242, 242);
+$main-red-accent: rgb(245, 22, 22);
+
+// ? ? ? ? ? ? ? ? ? ? ? ?
+// ? Page Header Styles ?
+// ? ? ? ? ? ? ? ? ? ? ?
+
+#page-header {
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  background-color: $main-dark;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h1,
+  .v-icon {
+    color: white;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 0.25rem + 3.5vw, 5rem);
+    font-weight: normal;
+    text-align: center;
+  }
+
+  #shopping-utilities {
+    width: 100%;
+    height: 60px;
+    display: grid;
+    grid-template-columns: 2fr 8fr 2fr;
+    margin: 1em 0 2em;
+
+    button {
+      background-color: transparent;
+      border: none;
+      color: $main-light;
+    }
+
+    @media (max-width: 550px) {
+      & > .categories.medium-screen {
+        outline: red solid 5px;
+        display: none;
+      }
+    }
+
+    @media (min-width: 550px) {
+      & > .categories.small-screen {
+        outline: blue solid 5px;
+        display: none;
+      }
+    }
+
+    & > li {
+      display: flex;
+    }
+
+    .v-icon {
+      font-size: 1.5em;
+    }
+
+    .categories,
+    .cart {
+      padding: 1em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .categories {
+      position: relative;
+
+      button {
+        font-size: 1.5em;
+        padding-right: 25px;
+      }
+
+      button::after {
+        content: '>';
+        position: absolute;
+        rotate: 90deg;
+        translate: 8px 2px;
+      }
+    }
+
+    .search-bar {
+      position: relative;
+
+      input {
+        border-radius: 3em;
+        border: 2px solid $main-light;
+        background: none;
+        width: 100%;
+        padding: 0 1em 0 3em;
+        color: $main-light;
+        font-size: 1.25em;
+      }
+
+      .v-icon {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 1em;
+        margin: auto;
+      }
+    }
+  }
+}
+
+// ? ? ? ? ? ? ? ? ? ? ? ?
+// ? Visualiser Styles ?
+// ? ? ? ? ? ? ? ? ? ?
+
+#visualiser {
+  height: 50vh;
+  position: relative;
+  color: $main-light;
+
+  .video-overlay {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background: linear-gradient($main-dark, $main-dark-transparent);
+    z-index: 1;
+
+    h2 {
+      display: flex;
+      align-items: center;
+      width: 80%;
+      height: 100%;
+      margin: auto;
+      font-size: clamp(2em, 0.5em + 2vw, 5em);
+      line-height: 1.5em;
+    }
+  }
+
+  video {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+}
+
+// ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?
+// ? Merchandise Items Styles ?
+// ? ? ? ? ? ? ? ? ? ? ? ? ? ?
+
+#merchandise-items {
+  color: $main-dark;
+  padding-top: 2rem;
+
+  h2 {
+    font-weight: normal;
+    text-align: center;
+    font-size: clamp(1.5em, 0.5em + 4vw, 5em);
+  }
+
+  #categories {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    padding: 0px 10%;
+    min-height: fit-content;
+
+    .merchandise-category {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border: $main-dark-transparent 2px solid;
+      margin: 2rem;
+      width: 250px;
+      height: 350px;
+
+      h3 {
+        margin: 0;
+        padding: 1em;
+        width: 100%;
+        border-bottom: $main-dark-transparent 2px solid;
+        text-align: center;
+      }
+
+      .image-container {
+        display: flex;
+        height: 100%;
+        width: 100%;
+        justify-content: center;
+
+        img {
+          object-fit: scale-down;
+          width: 200px;
+        }
+      }
+    }
+  }
+}
+
+// ? ? ? ? ? ? ? ? ? ?
+// ? Footer Styles ?
+// ? ? ? ? ? ? ? ?
+
+footer {
+  color: $main-light;
+  background-color: $main-dark;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// ? ? ? ? ? ? ? ? ? ? ? ? ? ?
+// ? Feedback Bubble Styles ?
+// ? ? ? ? ? ? ? ? ? ? ? ? ?
+
+.feedback-bubble {
+  position: fixed;
+  bottom: -50px;
+  height: 100px;
+  width: calc(100px + 2.5vw);
+  left: 15%;
+  border-radius: 25px;
+  background-color: $main-red-accent;
+  border: 2px solid $main-light;
+  z-index: 2;
+
+  p {
+    margin-top: -25px;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    font-size: 1.25em;
+    color: $main-light;
+  }
+}
+
+.feedback-portal {
+  position: fixed;
+  bottom: -300px;
+  left: 15%;
+  width: 60%;
+  background-color: white;
+  border-radius: 25px;
+  padding: 0 2rem;
+  box-shadow: 1px 1px 20px -5px $main-dark;
+  z-index: 1;
+  transition: bottom ease-in 400ms;
+
+
+  h3 {
+    border-bottom: 2px $main-dark-transparent solid;
+    padding-bottom: 1rem;
+  }
+
+  textarea {
+    height: 100px;
+    max-height: 200px;
+    width: 100%;
+    resize: none;
+    background-color: inherit;
+    border: none;
+    outline: $main-red-accent !important;
+  }
+
+  button {
+    border: none;
+    box-shadow: 5px -1px 20px -5px $main-red-accent;
+    background-color: $main-red-accent;
+    color: white;
+    margin: 1rem 0;
+    padding: .5rem;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+
+  &.open {
+    bottom: 75px;
+  }
+}
