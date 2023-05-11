@@ -1,5 +1,6 @@
 package com.rocmerchbackend.rocmerchbackend.model;
 
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 
 @Entity
@@ -8,33 +9,22 @@ public class MerchItemInCart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    // ? Old code ?
-//    private Long quantity;
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "merchandise_item_id", referencedColumnName = "id")
-//    private MerchandiseItems merchandiseItem;
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "order_id", referencedColumnName = "id")
-//    private Orders orders;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
-    private Orders orders;
+    private int quantity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_id")
-    private MerchandiseItems merchandiseItems;
+    @ManyToOne
+    @JoinColumn(name = "order_id", referencedColumnName ="id")
+    @JsonProperty(value = "orderId")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    private MerchandiseOrders merchandiseOrders;
 
-    private Long quantity;
+    @ManyToOne
+    @JoinColumn(name = "merchandise_id", referencedColumnName = "id")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    private MerchandiseItems merchandiseItem;
 
-    public Orders getOrders() {
-        return orders;
-    }
+    // Getters and Setters
 
-    public void setOrders(Orders orders) {
-        this.orders = orders;
-    }
 
     public Long getId() {
         return id;
@@ -44,19 +34,27 @@ public class MerchItemInCart {
         this.id = id;
     }
 
-    public Long getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Long quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
     public MerchandiseItems getMerchandiseItem() {
-        return merchandiseItems;
+        return merchandiseItem;
     }
 
     public void setMerchandiseItem(MerchandiseItems merchandiseItem) {
-        this.merchandiseItems = merchandiseItem;
+        this.merchandiseItem = merchandiseItem;
+    }
+
+    public MerchandiseOrders getMerchandiseOrders() {
+        return merchandiseOrders;
+    }
+
+    public void setMerchandiseOrders(MerchandiseOrders merchandiseOrders) {
+        this.merchandiseOrders = merchandiseOrders;
     }
 }

@@ -1,3 +1,31 @@
+<template>
+  <section class="shopping-section">
+    <h2 class="section-header">Shop by category</h2>
+    <div id="categories" class="item-card-container">
+      <MerchandiseCategory
+        category="Clothing"
+        :imageForCategory="clothesCategory"
+        :altForCategory="'Black Picks for Sale'"
+      />
+      <MerchandiseCategory
+        category="Accessories"
+        :imageForCategory="accessoriesCategory"
+        :altForCategory="'Black Picks for Sale'"
+      />
+      <MerchandiseCategory
+        category="Music"
+        :imageForCategory="MusicCategory"
+        :altForCategory="'Black Picks for Sale'"
+      />
+      <MerchandiseCategory
+        category="Music Accessories"
+        :imageForCategory="musicAccessoriesCategory"
+        :altForCategory="'Black Picks for Sale'"
+      />
+    </div>
+  </section>
+</template>
+
 <script lang="ts">
 import MerchandiseCategory from './MerchandiseCategory.vue'
 import PickImage from '../assets/images/merchCategories/BlackPicks.jpeg'
@@ -13,39 +41,11 @@ export default {
   props: [PickImage],
   data() {
     return {
-      pickCategory: PickImage,
+      musicAccessoriesCategory: PickImage,
       accessoriesCategory: ToteImage,
       clothesCategory: ShirtImage,
-      recordingsCategory: VinylImage,
+      MusicCategory: VinylImage,
     }
   },
 }
 </script>
-
-<template>
-  <section id="merchandise-items">
-    <h2>Shop by category</h2>
-    <div id="categories">
-      <MerchandiseCategory
-        category="Clothes"
-        :imageForCategory="clothesCategory"
-        :altForCategory="'Black Picks for Sale'"
-      />
-      <MerchandiseCategory
-        category="Accessories"
-        :imageForCategory="accessoriesCategory"
-        :altForCategory="'Black Picks for Sale'"
-      />
-      <MerchandiseCategory
-        category="Physical Recordings"
-        :imageForCategory="recordingsCategory"
-        :altForCategory="'Black Picks for Sale'"
-      />
-      <MerchandiseCategory
-        category="Music Accessories"
-        :imageForCategory="pickCategory"
-        :altForCategory="'Black Picks for Sale'"
-      />
-    </div>
-  </section>
-</template>

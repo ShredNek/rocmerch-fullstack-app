@@ -1,10 +1,31 @@
 <template>
-  <div>
+  <div :key="item.id" class="item-card">
+    <div class="image-container">
+      <img
+        :alt="`Image of ${item.name}`"
+        src="../assets/images/merchCategories/BlackTshirt.png"
+      />
+    </div>
+    <h3 class="individual-item">{{ cappedItemName }}</h3>
+    <h2 class="price">${{ item.price }}</h2>
   </div>
 </template>
 
 <script lang="ts">
+import { MerchandiseItemInterface, uppercaseFirstLetter } from '../GLOBALS'
+
 export default {
-  name: "MerchandiseItem"
+  name: 'MerchandiseItem',
+  props: {
+    item: { type: Object as () => MerchandiseItemInterface, required: true },
+  },
+  data() {
+    return {
+      cappedItemName: ''
+    }
+  },
+  mounted() {
+    this.cappedItemName = uppercaseFirstLetter(this.item.name)
+  }
 }
 </script>
