@@ -9,7 +9,7 @@
       </div>
       <div v-else class="item-card-container">
         <div v-for="item in items" :key="item.id">
-          <MerchandiseItem :item="item"/>
+          <MerchandiseItem :item="item" />
         </div>
       </div>
     </div>
@@ -19,15 +19,19 @@
 </template>
 
 <script lang="ts">
+import { useCategoryItemsStore } from '../stores/categoryItems'
 import Header from '../components/Header.vue'
 import Visualiser from '../components/Visualiser.vue'
 import CopyrightFooter from '../components/CopyrightFooter.vue'
 import FeedbackBubble from '../components/FeedbackBubble.vue'
 import MerchandiseItem from '../components/MerchandiseItem.vue'
-// ! Ignore this stupid error
 import LoadingSpinner from '../components/LoadingSpinner.vue'
 import axios from 'axios'
-import { MerchandiseItemInterface, uppercaseFirstLetter, removeHyphen } from '../GLOBALS'
+import {
+  MerchandiseItemInterface,
+  uppercaseFirstLetter,
+  removeHyphen,
+} from '../GLOBALS'
 
 export default (await import('vue')).defineComponent({
   name: 'ItemsByCategory',
@@ -57,11 +61,13 @@ export default (await import('vue')).defineComponent({
         const url = `http://localhost:8080/items/get-by-category/${this.$route.params.category}`
         const response = await axios.get(url)
         this.items = response.data
+        
+        const store = useCategoryItemsStore()
+        store.storeItems(this.items)
       } catch (e) {
         console.log(e)
       }
     },
-    
   },
 })
 </script>

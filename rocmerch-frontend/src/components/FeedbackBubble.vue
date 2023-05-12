@@ -1,5 +1,5 @@
 <template>
-  <button class="feedback-bubble" v-on:click="clickedState = !clickedState">
+  <button class="feedback-bubble red-glow" v-on:click="clickedState = !clickedState">
     <p>Feedback</p>
   </button>
   <FeedbackPortal :isOpen="clickedState"/>

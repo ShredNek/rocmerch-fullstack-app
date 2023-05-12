@@ -1,14 +1,16 @@
 <template>
-  <div :key="item.id" class="item-card">
-    <div class="image-container">
-      <img
-        :alt="`Image of ${item.name}`"
-        src="../assets/images/merchCategories/BlackTshirt.png"
-      />
+  <router-link :to="individualItemRoute">
+    <div :key="item.id" class="item-card">
+      <div class="image-container">
+        <img
+          :alt="`Image of ${item.name}`"
+          src="../assets/images/merchCategories/BlackTshirt.png"
+        />
+      </div>
+      <h3 class="individual-item">{{ cappedItemName }}</h3>
+      <h2 class="price">${{ item.price }}</h2>
     </div>
-    <h3 class="individual-item">{{ cappedItemName }}</h3>
-    <h2 class="price">${{ item.price }}</h2>
-  </div>
+  </router-link>
 </template>
 
 <script lang="ts">
@@ -21,11 +23,13 @@ export default {
   },
   data() {
     return {
-      cappedItemName: ''
+      cappedItemName: '',
+      individualItemRoute: '',
     }
   },
   mounted() {
     this.cappedItemName = uppercaseFirstLetter(this.item.name)
+    this.individualItemRoute = `/item/${this.item.category}/${this.item.id}`
   }
 }
 </script>
