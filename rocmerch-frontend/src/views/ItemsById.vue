@@ -2,7 +2,15 @@
   <section>
     <Header />
     <div class="shopping-section">
-      <div class="individual-merchandise-item">
+      <div v-if="Object.keys(item).length === 0" class="item-card-container">
+        <LoadingSpinner />
+      </div>
+      <div v-else class="individual-merchandise-item">
+        <AddedToCart
+          :itemName="item.name"
+          :itemQuantity="itemQuantity"
+          :isOpen="isOpen"
+        />
         <div class="image-container">
           <img
             src="../assets/images/RipplesOfChange.jpg"
@@ -17,9 +25,18 @@
             <div class="quantity">
               <button class="quantity-adjust" @click="itemQuantity++">+</button>
               <p>{{ itemQuantity }}</p>
-              <button class="quantity-adjust" @click="itemQuantity--">-</button>
+              <button
+                class="quantity-adjust"
+                @click="itemQuantity ? itemQuantity-- : null"
+              >
+                -
+              </button>
             </div>
-            <button class="red-glow add-to-cart">ADD TO CART</button>
+            <ReactiveQuantityButton
+              :quantity="itemQuantity"
+              :onClickBubble="addToCart"
+              :buttonText="'ADD TO CART'"
+            />
           </div>
         </div>
       </div>
@@ -31,11 +48,20 @@
 
 <script lang="ts">
 import { useCategoryItemsStore } from '../stores/categoryItems'
+import { useUserCartAndDataStore } from '../stores/userCartAndData'
 import Header from '../components/Header.vue'
 import CopyrightFooter from '../components/CopyrightFooter.vue'
 import FeedbackBubble from '../components/FeedbackBubble.vue'
 import MerchandiseItem from '../components/MerchandiseItem.vue'
-import { MerchandiseItemInterface } from '../GLOBALS'
+import LoadingSpinner from '../components/LoadingSpinner.vue'
+import AddedToCart from '../components/AddedToCart.vue'
+import ReactiveQuantityButton from '../components/ReactiveQuantityButton.vue'
+import {
+  MerchandiseItemInterface,
+  MerchandiseItemWithQuantityInterface,
+  uppercaseFirstLetter,
+} from '../GLOBALS'
+import axios from 'axios'
 
 export default (await import('vue')).defineComponent({
   name: 'ItemsByCategory',
@@ -44,20 +70,71 @@ export default (await import('vue')).defineComponent({
     CopyrightFooter,
     FeedbackBubble,
     MerchandiseItem,
+    LoadingSpinner,
+    AddedToCart,
+    ReactiveQuantityButton,
   },
   data() {
     return {
       item: {} as MerchandiseItemInterface,
       itemQuantity: 1,
+      itemWithQuantity: {} as MerchandiseItemWithQuantityInterface,
+      isOpen: false,
     }
   },
-  mounted() {
-    const categoryItemsStore = useCategoryItemsStore()
-    const currentItemId = Number(this.$route.params.id)
+  async mounted() {
+    await this.getSelectedItem()
+    this.item.name = uppercaseFirstLetter(this.item.name)
+  },
+  methods: {
+    addToCart() {
+      const userItemsAndDataStore = useUserCartAndDataStore()
 
-    categoryItemsStore.categoryItems.forEach((i) => {
-      if (i.id === currentItemId) this.item = i
-    })
+      let currItem = this.itemWithQuantity
+      currItem.quantity = this.itemQuantity
+      currItem.merchandiseItem = this.item
+
+      const newItem = {
+        quantity: this.itemQuantity,
+        merchandiseItem: this.item,
+      }
+
+      const isThere = userItemsAndDataStore.checkIfItemPresent(newItem)
+
+      isThere
+        ? userItemsAndDataStore.addQuantityToItem(newItem)
+        : userItemsAndDataStore.storeOneItem(newItem)
+
+      this.activateAddedToCartNotification()
+    },
+    activateAddedToCartNotification() {
+      const durationOfNotification = 4000
+      this.isOpen = true
+
+      setTimeout(() => (this.isOpen = false), durationOfNotification)
+    },
+    async getSelectedItem() {
+      const currentItemId = Number(this.$route.params.id)
+      let item = this.loadItemFromLocalStore(currentItemId)
+
+      if (item === undefined || item === null) {
+        await this.loadItemFromDatabase(currentItemId)
+      } else {
+        this.item = item
+      }
+    },
+    loadItemFromLocalStore(currId: number) {
+      const categoryItemsStore = useCategoryItemsStore()
+      return categoryItemsStore.categoryItems.find((i) => i.id === currId)
+    },
+    async loadItemFromDatabase(currId: number) {
+      const url = `http://localhost:8080/items/get-by-category/${this.$route.params.category}`
+      const response = await axios.get(url)
+
+      this.item = response.data.find(
+        (i: MerchandiseItemInterface) => i.id === currId
+      )
+    },
   },
 })
 </script>

@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import { createRouter, createWebHistory, RouterLink } from 'vue-router'
 import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import './styles/homepage.scss'
 import App from './App.vue'
 import routes from './routes.js'
@@ -11,9 +12,10 @@ import {
   faCartShopping,
   faMagnifyingGlass,
   faShapes,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faCartShopping, faMagnifyingGlass, faShapes)
+library.add(faCartShopping, faMagnifyingGlass, faShapes, faXmark)
 
 const router = createRouter({
   history: createWebHistory('/'),
@@ -21,6 +23,7 @@ const router = createRouter({
 })
 
 const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
 
 createApp(App)
   .use(router)

@@ -1,11 +1,12 @@
 import Home from './views/Home.vue'
 import ItemsByCategory from './views/ItemsByCategory.vue'
 import ItemsByID from './views/ItemsById.vue'
+import Checkout from './views/Checkout.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'home',
     component: Home,
   },
   {
@@ -17,6 +18,11 @@ const routes = [
     path: '/item/:category/:id',
     name: 'itemId',
     component: ItemsByID,
+  },
+  {
+    path: '/checkout',
+    name: 'checkout',
+    component: Checkout,
   },
 ]
 
@@ -33,23 +39,7 @@ HOW TO LAYOUT WEBSITE
 
 /item/{category}/{id} = individual item layout
 
-
-
-
-
-OLD
-
-
-
-
-
-
-
-
-
-/item/{category} = category layout
-
-/item/{id} = individual item layout
+/item/checkout = individual item layout
 
 
 */
