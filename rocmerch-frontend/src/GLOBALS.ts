@@ -1,3 +1,4 @@
+import axios from 'axios'
 export interface MerchandiseItemInterface {
   id: number
   name: string
@@ -26,4 +27,30 @@ export const uppercaseFirstLetter = (word: string | string[]) => {
 
 export const removeHyphen = (word: string) => {
   return word.replace('-', ' ')
+}
+
+export const NOTIFICATION_DURATION = 3000
+
+export const isValidEmail = (email: string) => {
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+  return emailRegex.test(email)
+}
+
+export async function getAllItems() {
+  try {
+    const url = `http://localhost:8080/items/all`
+    return await axios.get(url)
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+export async function getAllItemsThatMatchSearch(query: string) {
+  if (query.length === 0) return
+  try {
+    const url = `http://localhost:8080/items/get-by-name/${query}`
+    return await axios.get(url)
+  } catch (e) {
+    console.log(e)
+  }
 }

@@ -13,9 +13,18 @@ import {
   faMagnifyingGlass,
   faShapes,
   faXmark,
+  faPlus,
+  faMinus,
 } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faCartShopping, faMagnifyingGlass, faShapes, faXmark)
+library.add(
+  faCartShopping,
+  faMagnifyingGlass,
+  faShapes,
+  faXmark,
+  faPlus,
+  faMinus
+)
 
 const router = createRouter({
   history: createWebHistory('/'),

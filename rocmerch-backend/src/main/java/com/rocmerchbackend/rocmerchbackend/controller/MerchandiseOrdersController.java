@@ -35,7 +35,7 @@ public class MerchandiseOrdersController {
     }
 
     @PostMapping(value = "/new", produces = "application/json")
-    public String newOrder(@RequestBody MerchandiseOrders newOrder) throws JsonProcessingException {
+    public String newOrder(@RequestBody MerchandiseOrders newOrder) throws JsonProcessingException  {
 
         Long parentId = generateUniqueId();
         try {
@@ -64,11 +64,11 @@ public class MerchandiseOrdersController {
     }
 
     @GetMapping("/all")
-    public List<MerchandiseOrders> getShoppingCarts() {
+    public List<MerchandiseOrders> getAllOrders() {
         return merchandiseOrdersRepository.findAll();
     }
 
-    @GetMapping("/cart/{id}")
+    @GetMapping("/get-by-id/{id}")
     public Optional<MerchandiseOrders> getShoppingCartById(@PathVariable Long id) {
         return merchandiseOrdersRepository.findById(id);
     }
@@ -76,15 +76,14 @@ public class MerchandiseOrdersController {
     @PutMapping("/edit/{id}")
     public String editShoppingCard(@PathVariable Long id, @RequestBody MerchandiseOrders editedCart) throws CouldNotFindItemById {
         BigDecimal newTotalPrice;
+        MerchandiseOrders oldOrder = merchandiseOrdersRepository.findById(id).orElseThrow(() -> new CouldNotFindItemById(id));
         try {
-            MerchandiseOrders oldOrder = merchandiseOrdersRepository.findById(id).orElseThrow(() -> new CouldNotFindItemById(id));
             if (editedCart.getId() == null) return "You didn't send any data! Try again";
 
             ArrayList<Long> newCartItemIds = new ArrayList<>();
             editedCart.getMerchItemsInCart().forEach(i -> {
                 newCartItemIds.add(i.getId());
             });
-
 
             AtomicInteger iteration = new AtomicInteger(0);
             oldOrder.getMerchItemsInCart().forEach(i -> {
@@ -102,19 +101,25 @@ public class MerchandiseOrdersController {
                     validCartItem.getMerchandiseItem().setCategory(currentCartItemStock.getCategory());
                     validCartItem.getMerchandiseItem().setItemDescription(currentCartItemStock.getItemDescription());
                     validCartItem.getMerchandiseItem().setPrice(currentCartItemStock.getPrice());
+                    validCartItem.getMerchandiseItem().setImage(currentCartItemStock.getImage());
                     merchItemInCartRepository.save(validCartItem);
                 }
                 iteration.getAndIncrement();
             });
+
             newTotalPrice = editedCart.calculateTotalPrice();
-            System.out.println(newTotalPrice);
             oldOrder.setTotalPrice(newTotalPrice);
-            Hibernate.initialize(oldOrder);
-//            merchandiseOrdersRepository.save(oldOrder);
+
+            oldOrder.setPhoneForOrder(editedCart.getPhoneForOrder());
+            oldOrder.setAddressForOrder(editedCart.getAddressForOrder());
+            oldOrder.setCompanyName(editedCart.getCompanyName());
+            oldOrder.setShippingNotes(editedCart.getShippingNotes());
+
+            merchandiseOrdersRepository.save(oldOrder);
         } catch (Exception e) {
             return e.toString();
         }
-        return "Successfully edited cart Id: " + id;
+        return "Successfully edited cart id: "+oldOrder.getId();
     }
 
     @DeleteMapping("/delete/{id}")

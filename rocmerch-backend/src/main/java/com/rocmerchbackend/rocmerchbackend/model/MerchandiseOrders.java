@@ -16,6 +16,11 @@ public class MerchandiseOrders {
     private Long id;
     private String nameForOrder;
     private String emailForOrder;
+    private String phoneForOrder;
+    private String addressForOrder;
+    private String companyName;
+    @Column(name = "shipping_notes", columnDefinition = "varchar(4000)")
+    private String shippingNotes;
     @Column(name = "total_price", columnDefinition = "DECIMAL(10,2)")
     private BigDecimal totalPrice;
     @OneToMany(mappedBy = "merchandiseOrders", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
@@ -35,6 +40,38 @@ public class MerchandiseOrders {
     }
 
     // Getters and setters
+
+    public String getPhoneForOrder() {
+        return phoneForOrder;
+    }
+
+    public void setPhoneForOrder(String phoneForOrder) {
+        this.phoneForOrder = phoneForOrder;
+    }
+
+    public String getAddressForOrder() {
+        return addressForOrder;
+    }
+
+    public void setAddressForOrder(String addressForOrder) {
+        this.addressForOrder = addressForOrder;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getShippingNotes() {
+        return shippingNotes;
+    }
+
+    public void setShippingNotes(String shippingNotes) {
+        this.shippingNotes = shippingNotes;
+    }
 
     public Long getId() {
         return id;

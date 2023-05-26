@@ -10,4 +10,6 @@ public interface MerchandiseItemsRepository extends JpaRepository<MerchandiseIte
 
     public List<MerchandiseItems> getMerchandiseItemsByCategory(String category);
 
+    public List<MerchandiseItems> getMerchandiseItemsByName(String name);
+
 }

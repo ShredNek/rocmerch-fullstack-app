@@ -1,131 +1,142 @@
 <template>
   <nav id="page-header">
-    <h1>Ripples of Change - Official Merchandise</h1>
+    <router-link to="/">
+      <h1>Ripples of Change - Official Merchandise</h1>
+    </router-link>
     <ul id="shopping-utilities">
       <li class="categories medium-screen">
-        <button>Categories</button>
+        <button @click="isCategoriesDropdownOpen = true" id="dropdown-button">
+          Categories
+        </button>
       </li>
       <li class="categories small-screen">
-        <v-icon class="v-icon" icon="fa-solid fa-shapes" />
+        <button @click="isCategoriesDropdownOpen = true" id="dropdown-button">
+          <v-icon class="v-icon" icon="fa-solid fa-shapes" />
+        </button>
       </li>
-      <li class="search-bar">
-        <input name="search-bar" type="text" />
-        <v-icon class="v-icon" icon="fa-solid fa-magnifying-glass" />
-      </li>
+      <CategoriesDropdown :isOpen="isCategoriesDropdownOpen" />
+      <SearchBar
+        @click="isSearchBarOpen = true"
+        @items-loading="handleLoadingItems"
+        @items-loaded="handleLoadedItems"
+      />
+      <SearchResultsDropdown
+        :isOpen="isSearchBarOpen"
+        :searchResults="itemsReturned"
+      />
       <li class="cart">
-        <button @click="openCartSidebar">
+        <button @click="isCartSidebarOpen = true">
           <v-icon class="v-icon" icon="fa-solid fa-cart-shopping" />
         </button>
       </li>
     </ul>
   </nav>
-  <dialog ref="cartSidebar" id="cart-sidebar" class="close">
-    <div class="transparent-row">
-      <button class="close-button" @click="closeCartSidebar">
-        <v-icon class="v-icon" icon="fa-solid fa-xmark" />
-      </button>
-      <h2>Close cart</h2>
-    </div>
-    <div class="cart-item-container">
-      <div class="cart-items">
-        <div
-          v-if="
-            currentCart.merchItemsInCart === undefined ||
-            currentCart.merchItemsInCart.length === 0
-          "
-        >
-          <div class="item empty-cart-msg"><h4>(your cart is empty)</h4></div>
-        </div>
-        <div v-else-if="currentCart.merchItemsInCart.length > 0">
-          <div
-            v-for="miin in currentCart.merchItemsInCart"
-            :key="miin.merchandiseItem.id"
-            class="item"
-          >
-            <div class="img-and-item-name">
-              <div class="image-container">
-                <img src="../assets/images/Heart_Draft2.jpg" alt="" />
-              </div>
-              <h4>{{ miin.merchandiseItem.name }}</h4>
-            </div>
-            <div class="price-quantity-drop-item">
-              <p class="price">${{ miin.merchandiseItem.price }}</p>
-              <p class="quantity">{{ miin.quantity }}</p>
-              <button
-                class="close-button"
-                @click="deleteItemFromCart(miin.merchandiseItem.id)"
-              >
-                <v-icon class="v-icon" icon="fa-solid fa-xmark" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="cart-details">
-        <h3>Cart total</h3>
-        <h4>${{ reactiveTotalPrice }}</h4>
-        <div class="button-row">
-          <button class="edit">Edit Cart</button>
-          <ReactiveQuantityButton
-              :quantity="reactiveTotalPrice"
-              :buttonText="'Pay Now'"
-            />
-        </div>
-      </div>
-    </div>
-  </dialog>
+  <CartSidebarVue
+    :isOpen="isCartSidebarOpen"
+    @cart-close-event="isCartSidebarOpen = false"
+  />
 </template>
 
 <script lang="ts">
-import { MerchandiseOrderInterface } from '../GLOBALS'
-import { useUserCartAndDataStore } from '../stores/userCartAndData'
-import ReactiveQuantityButton from './ReactiveQuantityButton.vue'
+import { MerchandiseItemInterface } from '../GLOBALS'
+import CartSidebarVue from './CartSidebar.vue'
+import CategoriesDropdown from './CategoriesDropdown.vue'
+import SearchBar from './SearchBar.vue'
+import SearchResultsDropdown from './SearchResultsDropdown.vue'
 
 export default {
   name: 'Header',
+  emits: ['cart-close-event'],
   components: {
-    ReactiveQuantityButton
+    CartSidebarVue,
+    CategoriesDropdown,
+    SearchBar,
+    SearchResultsDropdown,
   },
   data() {
     return {
-      currentCart: {} as MerchandiseOrderInterface,
+      isCartSidebarOpen: false,
+      isCategoriesDropdownOpen: false,
+      isSearchBarOpen: false,
+      categoriesDropdownString: 'categories-dropdown',
+      searchBarDropdownString: 'search-bar-dropdown',
+      searchBarButtonDropdownString: 'search-bar-button-dropdown',
+      buttonDropdownString: 'dropdown-button',
+      itemsReturned: [] as MerchandiseItemInterface[],
     }
   },
-  computed: {
-    reactiveListOfCarts() {
-      const userCartAndData = useUserCartAndDataStore()
-      this.currentCart.totalPrice = userCartAndData.calculateTotalPrice()
-      return userCartAndData.merchItemsInCart
-    },
-    reactiveTotalPrice() {
-      const userCartAndData = useUserCartAndDataStore()
-      return userCartAndData.calculateTotalPrice()
-    },
+  mounted() {
+    this.addGlobalClickListeners()
+  },
+  unmounted() {
+    this.removeGlobalClickListeners()
   },
   methods: {
-    openCartSidebar() {
-      const userCartAndData = useUserCartAndDataStore()
+    handleGlobalClickForCategoriesDropdown(e: Event) {
+      const clickedElement = e.target as HTMLDivElement
+      const clickedElementClassList = clickedElement.classList
 
-      this.currentCart.merchItemsInCart = userCartAndData.merchItemsInCart
-      this.currentCart.totalPrice = userCartAndData.calculateTotalPrice()
+      if (
+        (clickedElement !== null &&
+          clickedElementClassList[0] === this.categoriesDropdownString) ||
+        clickedElement.id === this.buttonDropdownString
+      ) {
+        return
+      }
 
-      const sidebar = this.$refs.cartSidebar as HTMLDialogElement
-      sidebar.classList.remove('close')
-      sidebar.showModal()
+      this.isCategoriesDropdownOpen = false
     },
-    onSidebarAnimationEnd() {
-      const sidebar = this.$refs.cartSidebar as HTMLDialogElement
-      sidebar.removeEventListener('animationend', this.onSidebarAnimationEnd)
-      sidebar.close()
+    handleGlobalClickForSearchBarDropdown(e: Event) {
+      const clickedElement = e.target as HTMLDivElement
+      const clickedElementClassList = clickedElement.classList
+
+      if (
+        clickedElement !== null &&
+        clickedElementClassList[0] === this.searchBarDropdownString
+      ) {
+        return
+      }
+
+      this.isSearchBarOpen = false
     },
-    closeCartSidebar() {
-      const sidebar = this.$refs.cartSidebar as HTMLDialogElement
-      sidebar.classList.add('close')
-      sidebar.addEventListener('animationend', this.onSidebarAnimationEnd)
+    addGlobalClickListeners() {
+      const body = this.$root?.$refs.main as HTMLBodyElement | undefined
+      if (body) {
+        body.addEventListener(
+          'click',
+          this.handleGlobalClickForCategoriesDropdown
+        )
+        body.addEventListener(
+          'click',
+          this.handleGlobalClickForSearchBarDropdown
+        )
+      }
     },
-    deleteItemFromCart(id: number) {
-      const userCartAndData = useUserCartAndDataStore()
-      userCartAndData.removeItemById(id)
+    removeGlobalClickListeners() {
+      const body = this.$root?.$refs.main as HTMLBodyElement | undefined
+      if (body) {
+        body.removeEventListener(
+          'click',
+          this.handleGlobalClickForCategoriesDropdown
+        )
+        body.removeEventListener(
+          'click',
+          this.handleGlobalClickForSearchBarDropdown
+        )
+      }
+    },
+    handleLoadingItems() {
+      this.itemsReturned = [] as MerchandiseItemInterface[]
+      this.isSearchBarOpen = true
+    },
+    handleLoadedItems(items: MerchandiseItemInterface[]) {
+      this.itemsReturned = items as MerchandiseItemInterface[]
+      this.isSearchBarOpen = true
+    },
+  },
+  watch: {
+    isSearchBarOpen(c) {
+      console.log(c)
     },
   },
 }

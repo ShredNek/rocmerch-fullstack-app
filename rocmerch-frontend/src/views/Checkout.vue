@@ -1,88 +1,91 @@
 <template>
+  <InvalidInput :isOpen="isUserInputInvalid" />
   <section id="checkout">
-    <div class="user details">
-      <h1>Ripples Of Change - Official Merch Checkout</h1>
-      <div class="breadcrumbs">
-        <p>User</p>
-        <div>></div>
-        <p>Payment</p>
-        <div>></div>
-      </div>
-      <h2>User Details</h2>
-      <form action="POST">
-        <div class="item-container">
-          <div class="form-item">
-            <label for="first-name">First Name</label>
-            <input name="first-name" placeholder="John" />
-          </div>
-          <div class="form-item">
-            <label for="last-name">Last Name</label>
-            <input name="last-name" placeholder="Doe" />
-          </div>
-        </div>
-        <div class="item-container">
-          <div class="form-item">
-            <label for="company-name">Company Name</label>
-            <input
-              name="company-name"
-              placeholder="Alphanumeric characters only"
-            />
-          </div>
-        </div>
-        <div class="item-container">
-          <div class="form-item">
-            <label for="shipping-address">Shipping Address</label>
-            <input
-              name="shipping-address"
-              placeholder="42 Wallaby Way, Sydney NSW, Australia"
-            />
-          </div>
-        </div>
-        <div class="item-container">
-          <div class="form-item">
-            <label for="phone">Phone</label>
-            <input name="phone" placeholder="1234 567 890" />
-          </div>
-          <div class="form-item">
-            <label for="email-address">Email Address</label>
-            <input name="email-address" placeholder="johndoe@gmail.com" />
-          </div>
-        </div>
-        <div class="item-container">
-          <div class="form-item">
-            <label for="shipping-notes">Shipping notes</label>
-            <textarea
-              name="shipping-notes"
-              placeholder="Notes for shipping, e.g. leave with lobby staff"
-            />
-          </div>
-        </div>
-      </form>
+    <div v-if="changingParam === 'user'" class="user details">
+      <UserDetails
+        @invalid-input-event="isUserInputInvalid = true"
+        @close-self-event="isUserInputInvalid = false"
+      />
+    </div>
+    <div v-else-if="changingParam === 'payment'" class="user details">
+      <PaymentDetails
+        @invalid-input-event="isUserInputInvalid = true"
+        @close-self-event="isUserInputInvalid = false"
+      />
+    </div>
+    <div v-else-if="changingParam === 'finish'" class="user details">
+      <FinishDetails />
     </div>
     <div class="cart details">
       <h2>Order Summary</h2>
-      <div class="items"></div>
+      <div class="items">
+        <OrderSummaryItemVue
+          v-for="item in reactiveCartData.merchItemsInCart"
+          :key="item.merchandiseItem.id"
+          itemImage="/src/assets/images/Butterfly_Draft2.jpg"
+          :itemIndividualPrice="item.merchandiseItem.price"
+          :itemName="item.merchandiseItem.name"
+          :itemQuantity="item.quantity"
+        />
+      </div>
       <div class="subtotal">
         <h3>Subtotal</h3>
-        <h3>$100</h3>
+        <h3>${{ reactiveCartData.totalPrice }}</h3>
       </div>
       <div class="shipping">
         <div>
           <h3>Shipping</h3>
-          <h4>Standard shipping</h4>
+          <h4>(Standard shipping)</h4>
         </div>
         <h3>FREE</h3>
       </div>
       <div class="total">
         <h3>Total</h3>
-        <h2>$100</h2>
+        <h2>${{ reactiveCartData.totalPrice }}</h2>
       </div>
+      <router-link to="/">
+        <button class="resume red-glow animated">Resume Shopping</button>
+      </router-link>
+      <router-link to="/edit-cart">
+        <button class="edit">Edit Cart</button>
+      </router-link>
     </div>
   </section>
 </template>
 
 <script lang="ts">
+import UserDetails from '../components/UserDetails.vue'
+import PaymentDetails from '../components/PaymentDetails.vue'
+import OrderSummaryItemVue from '../components/OrderSummaryItem.vue'
+import InvalidInput from '../components/InvalidInput.vue'
+import FinishDetails from '../components/FinishDetails.vue'
+import { useUserCartAndDataStore } from '../stores/userCartAndData'
+
 export default (await import('vue')).defineComponent({
   name: 'Checkout',
+  components: {
+    UserDetails,
+    PaymentDetails,
+    OrderSummaryItemVue,
+    InvalidInput,
+    FinishDetails,
+  },
+  mounted() {
+    this.userCartAndData.totalPrice = this.userCartAndData.calculateTotalPrice()
+  },
+  data() {
+    return { isUserInputInvalid: false }
+  },
+  computed: {
+    userCartAndData() {
+      return useUserCartAndDataStore()
+    },
+    changingParam() {
+      return this.$route.params.step as string
+    },
+    reactiveCartData() {
+      return this.userCartAndData
+    },
+  },
 })
 </script>

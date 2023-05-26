@@ -33,9 +33,6 @@ import ToteImage from '../assets/images/merchCategories/BlackToteBag.jpg'
 import ShirtImage from '../assets/images/merchCategories/BlackTshirt.png'
 import VinylImage from '../assets/images/merchCategories/BlackVinyl.webp'
 export default {
-  created() {
-    console.log(PickImage)
-  },
   name: 'MerchandiseItems',
   components: { MerchandiseCategory },
   props: [PickImage],

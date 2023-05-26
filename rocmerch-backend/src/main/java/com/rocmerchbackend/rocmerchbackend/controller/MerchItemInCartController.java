@@ -37,7 +37,7 @@ public class MerchItemInCartController {
 
     @DeleteMapping("/wipe-all")
     public String wipeAllData() {
-        shoppingCartItemRepository.deleteAll();
+//        shoppingCartItemRepository.deleteAll();
         return "shoppingCartItemRepository wiped.";
     }
 

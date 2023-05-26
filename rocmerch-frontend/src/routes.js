@@ -2,6 +2,7 @@ import Home from './views/Home.vue'
 import ItemsByCategory from './views/ItemsByCategory.vue'
 import ItemsByID from './views/ItemsById.vue'
 import Checkout from './views/Checkout.vue'
+import EditCart from './views/EditCart.vue'
 
 const routes = [
   {
@@ -20,9 +21,14 @@ const routes = [
     component: ItemsByID,
   },
   {
-    path: '/checkout',
+    path: '/checkout/:step',
     name: 'checkout',
     component: Checkout,
+  },
+  {
+    path: '/edit-cart',
+    name: 'editCart',
+    component: EditCart,
   },
 ]
 

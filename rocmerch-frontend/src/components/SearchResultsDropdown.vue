@@ -1,0 +1,54 @@
+<template>
+  <div
+    id="search-bar-dropdown"
+    :class="['search-bar-dropdown', 'dropdown', isOpen ? 'open' : '']"
+  >
+    <div class="items">
+      <LoadingSpinner v-if="searchResults && searchResults.length === 0" class="loading"/>
+      <router-link
+        v-else-if="searchResults && searchResults.length >= 1"
+        v-for="item in searchResults.slice(0, 5)"
+        :key="item.id"
+        :to="`/item/${item.category}/${item.id}`"
+      >
+        <OrderSummaryItem
+          :item="item"
+          itemImage="/src/assets/images/Butterfly_Draft2.jpg"
+          :itemIndividualPrice="item.price"
+          :itemName="item.name"
+        />
+      </router-link>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import OrderSummaryItem from '../components/OrderSummaryItem.vue'
+import LoadingSpinner from './LoadingSpinner.vue'
+import { PropType } from 'vue'
+import { MerchandiseItemInterface } from '../GLOBALS'
+
+export default (await import('vue')).defineComponent({
+  name: 'SearchResultsDropdown',
+  components: {
+    OrderSummaryItem,
+    LoadingSpinner,
+  },
+  props: {
+    isOpen: { type: Boolean, required: true },
+    searchResults: {
+      type: [] as PropType<MerchandiseItemInterface[]> ,
+      required: false,
+    },
+  },
+  watch: {
+    searchResults(n) {
+      // console.log(n)
+    // console.clear()
+    },
+  },
+  mounted() {
+    // console.clear()
+  }
+})
+</script>

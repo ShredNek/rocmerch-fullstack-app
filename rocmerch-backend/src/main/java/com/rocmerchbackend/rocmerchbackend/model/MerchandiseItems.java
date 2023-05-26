@@ -1,8 +1,6 @@
 package com.rocmerchbackend.rocmerchbackend.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -15,15 +13,25 @@ public class MerchandiseItems {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Column(name = "item_description", columnDefinition="VARCHAR(4000)")
     private String itemDescription;
     private BigDecimal price;
     private String category;
+    private String image;
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     @JsonIgnore
     @OneToMany(mappedBy = "merchandiseItem", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<MerchItemInCart> merchItemInCart;
 
     // Getters and setters
-
 
     public Long getId() {
         return id;

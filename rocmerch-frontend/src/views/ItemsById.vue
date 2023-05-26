@@ -60,6 +60,7 @@ import {
   MerchandiseItemInterface,
   MerchandiseItemWithQuantityInterface,
   uppercaseFirstLetter,
+  NOTIFICATION_DURATION
 } from '../GLOBALS'
 import axios from 'axios'
 
@@ -108,10 +109,9 @@ export default (await import('vue')).defineComponent({
       this.activateAddedToCartNotification()
     },
     activateAddedToCartNotification() {
-      const durationOfNotification = 4000
       this.isOpen = true
 
-      setTimeout(() => (this.isOpen = false), durationOfNotification)
+      setTimeout(() => (this.isOpen = false), NOTIFICATION_DURATION)
     },
     async getSelectedItem() {
       const currentItemId = Number(this.$route.params.id)
@@ -136,5 +136,10 @@ export default (await import('vue')).defineComponent({
       )
     },
   },
+  watch: {
+    $route() {
+      this.getSelectedItem()
+    }
+  }
 })
 </script>

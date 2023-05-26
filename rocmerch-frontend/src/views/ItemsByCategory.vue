@@ -69,5 +69,10 @@ export default (await import('vue')).defineComponent({
       }
     },
   },
+  watch: {
+    $route() {
+      this.getCategoryOfItems()
+    }
+  }
 })
 </script>

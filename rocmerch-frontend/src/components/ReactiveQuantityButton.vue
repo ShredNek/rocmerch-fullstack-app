@@ -1,6 +1,6 @@
 <template>
   <button
-    :class="['red-glow', 'add-to-cart', quantity === 0 ? 'inactive' : '']"
+    :class="['red-glow', 'animated', 'add-to-cart', quantity === 0 ? 'inactive' : '']"
     @click="onClickBubble"
   >
     {{ buttonText }}

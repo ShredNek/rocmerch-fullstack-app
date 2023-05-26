@@ -42,6 +42,20 @@ export const useUserCartAndDataStore = defineStore('userCartAndData', {
         return false
       }
     },
+    getItemById(id: number) {
+      return this.merchItemsInCart.forEach((item) => {
+        if (item.merchandiseItem.id === id) {
+          return item.merchandiseItem
+        }
+      })
+      // if (isThere) {
+      //   // console.log(`item of ${i.merchandiseItem.id} is present already`)
+      //   return true
+      // } else {
+      //   // console.log(`item of ${i.merchandiseItem.id} isn't here`)
+      //   return false
+      // }
+    },
     addQuantityToItem(i: MerchandiseItemWithQuantityInterface) {
       const matchingItem = this.merchItemsInCart.find(
         (item) => item.merchandiseItem.id === i.merchandiseItem.id
