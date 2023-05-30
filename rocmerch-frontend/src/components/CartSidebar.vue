@@ -24,7 +24,7 @@
           >
             <div class="img-and-item-name">
               <div class="image-container">
-                <img src="../assets/images/Heart_Draft2.jpg" alt="" />
+                <img :src="handleDynamicUrl(miin.merchandiseItem)" alt="" />
               </div>
               <h4>{{ miin.merchandiseItem.name }}</h4>
             </div>
@@ -60,7 +60,7 @@
 </template>
 
 <script lang="ts">
-import { MerchandiseOrderInterface } from '../GLOBALS'
+import {  MerchandiseOrderInterface, generateDynamicUrl, MerchandiseItemInterface } from '../GLOBALS'
 import { useUserCartAndDataStore } from '../stores/userCartAndData'
 import ReactiveQuantityButton from './ReactiveQuantityButton.vue'
 import { useRouter } from 'vue-router'
@@ -123,6 +123,9 @@ export default (await import('vue')).defineComponent({
     handlePayNowClick() {
       this.router.push('/checkout/user')
     },
+    handleDynamicUrl(item: MerchandiseItemInterface) {
+      return generateDynamicUrl(item, import.meta.url)
+    }
   },
   watch: {
     isOpen: {

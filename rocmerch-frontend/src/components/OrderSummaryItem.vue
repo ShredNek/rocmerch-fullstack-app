@@ -53,7 +53,7 @@ export default (await import('vue')).defineComponent({
       this.item ? (this.item.quantity += 1) : null
     },
     decreaseQuantityOfItem() {
-      this.item ? (this.item.quantity -= 1) : null
+      this.item && this.item.quantity !== 1 ? (this.item.quantity -= 1) : null
     },
     removeItem() {
       this.item

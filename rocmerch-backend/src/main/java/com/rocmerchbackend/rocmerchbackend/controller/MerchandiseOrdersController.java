@@ -3,14 +3,17 @@ package com.rocmerchbackend.rocmerchbackend.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.rocmerchbackend.rocmerchbackend.exception.CouldNotFindItemById;
 import com.rocmerchbackend.rocmerchbackend.model.MerchItemInCart;
 import com.rocmerchbackend.rocmerchbackend.model.MerchandiseItems;
 import com.rocmerchbackend.rocmerchbackend.model.MerchandiseOrders;
 import com.rocmerchbackend.rocmerchbackend.repository.MerchItemInCartRepository;
 import com.rocmerchbackend.rocmerchbackend.repository.MerchandiseOrdersRepository;
+import com.rocmerchbackend.rocmerchbackend.service.GMailerService;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.cdi.Eager;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -27,7 +30,7 @@ public class MerchandiseOrdersController {
     @Autowired
     private MerchItemInCartRepository merchItemInCartRepository;
 
-    public Long generateUniqueId() {
+    public Long generateUniqueMerchandiseOrderId() {
         Long idIfMaxIdReturnsNull = (long) 1;
         Long maxId = merchandiseOrdersRepository.findMaxId();
         if (maxId == null) return idIfMaxIdReturnsNull;
@@ -35,36 +38,32 @@ public class MerchandiseOrdersController {
     }
 
     @PostMapping(value = "/new", produces = "application/json")
-    public String newOrder(@RequestBody MerchandiseOrders newOrder) throws JsonProcessingException  {
+    public String newOrder(@RequestBody MerchandiseOrders newOrder) throws JsonProcessingException {
 
-        Long parentId = generateUniqueId();
+        Long parentId = generateUniqueMerchandiseOrderId();
         try {
             newOrder.setId(parentId);
-            Hibernate.initialize(newOrder.getMerchItemsInCart());
 
             // Serialises each merchItemInCart to the parent id by initialising
             // the new order as the parent
             newOrder.getMerchItemsInCart()
-                    .forEach(item -> item.setMerchandiseOrders(newOrder));
+                    .forEach(item -> {
+                        item.setMerchandiseOrders(newOrder);
+                    });
 
             if (newOrder.getTotalPrice().equals(BigDecimal.ZERO)) {
                 newOrder.setTotalPrice(newOrder.calculateTotalPrice());
             }
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-            String json = objectMapper.writeValueAsString(newOrder);
-            System.out.println(json);
-
             merchandiseOrdersRepository.save(newOrder);
         } catch (Exception e) {
-            return "I'm afraid we couldn't process the json. Please email us @ danielleemusic98@gmail.com for assistance. Here's the error message: "+e.toString();
+            return "I'm afraid we couldn't process the json. Please email us @ danielleemusic98@gmail.com for assistance. Here's the error message: " + e.toString();
         }
         return "Shopping Cart saved to the Id of " + parentId;
     }
 
     @GetMapping("/all")
-    public List<MerchandiseOrders> getAllOrders() {
+    public List<MerchandiseOrders> getAllOrders() throws JsonProcessingException {
         return merchandiseOrdersRepository.findAll();
     }
 
@@ -119,7 +118,7 @@ public class MerchandiseOrdersController {
         } catch (Exception e) {
             return e.toString();
         }
-        return "Successfully edited cart id: "+oldOrder.getId();
+        return "Successfully edited cart id: " + oldOrder.getId();
     }
 
     @DeleteMapping("/delete/{id}")
@@ -137,6 +136,15 @@ public class MerchandiseOrdersController {
     public String wipeAllCarts() {
 //        merchandiseOrdersRepository.deleteAll();
         return "DANGEROUS METHOD SPOTTED. PLEASE UNCOMMENT CODE TO COMMIT TO THIS ACTION.";
+    }
+
+
+    @PostMapping("/send-email-for-order-id/{id}")
+    public void sendEmail(@PathVariable Long id) throws Exception {
+        var currOrder = getShoppingCartById(id);
+        var gMailer = new GMailerService();
+        gMailer.composeHtmlEmailTemplateFromMerchandiseOrder(currOrder.orElseThrow());
+        gMailer.sendEmail(gMailer.getEmailHeader(), gMailer.getEmailAsHtmlString());
     }
 }
 

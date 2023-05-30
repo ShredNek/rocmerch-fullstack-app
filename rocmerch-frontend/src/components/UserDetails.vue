@@ -18,23 +18,28 @@
     <div class="item-container">
       <div class="form-item">
         <label for="first-name">First Name</label>
-        <input name="first-name" placeholder="John" required />
+        <input id="first-name" name="first-name" placeholder="John" required />
       </div>
       <div class="form-item">
         <label for="last-name">Last Name</label>
-        <input name="last-name" placeholder="Doe" required />
+        <input id="last-name" name="last-name" placeholder="Doe" required />
       </div>
     </div>
     <div class="item-container">
       <div class="form-item">
         <label for="company-name">Company Name</label>
-        <input name="company-name" placeholder="Alphanumeric characters only" />
+        <input
+          id="company-name"
+          name="company-name"
+          placeholder="Alphanumeric characters only"
+        />
       </div>
     </div>
     <div class="item-container">
       <div class="form-item">
         <label for="shipping-address">Shipping Address</label>
         <input
+          id="shipping-address"
           name="shipping-address"
           placeholder="42 Wallaby Way, Sydney NSW, Australia"
           required
@@ -44,17 +49,23 @@
     <div class="item-container">
       <div class="form-item">
         <label for="phone">Phone</label>
-        <input name="phone" placeholder="1234 567 890" required />
+        <input id="phone" name="phone" placeholder="1234 567 890" required />
       </div>
       <div class="form-item">
         <label for="email-address">Email Address</label>
-        <input name="email-address" placeholder="johndoe@gmail.com" required />
+        <input
+          id="email-address"
+          name="email-address"
+          placeholder="johndoe@gmail.com"
+          required
+        />
       </div>
     </div>
     <div class="item-container">
       <div class="form-item">
         <label for="shipping-notes">Shipping notes</label>
         <textarea
+          id="shipping-notes"
           name="shipping-notes"
           placeholder="Notes for shipping, e.g. leave with lobby staff"
         />
@@ -72,11 +83,11 @@ import { NOTIFICATION_DURATION, isValidEmail } from '../GLOBALS'
 
 export default (await import('vue')).defineComponent({
   name: 'UserDetails',
-  emits: ['invalid-input-event', 'close-self-event'],
+  emits: ['invalid-input-event', 'close-self-event', 'create-order-event'],
   setup() {
     const router = useRouter()
     return {
-      router,
+      router
     }
   },
   methods: {
@@ -119,9 +130,12 @@ export default (await import('vue')).defineComponent({
         form.querySelectorAll('input, textarea')
       ) as Array<HTMLInputElement | HTMLTextAreaElement>
 
-      this.checkFormDetailsValidity(formControls)
-        ? this.router.push('/checkout/payment')
-        : this.handleInvalidDetails()
+      if (this.checkFormDetailsValidity(formControls)) {
+        this.createOrder()
+        this.router.push('/checkout/payment')
+      } else {
+        this.handleInvalidDetails()
+      }
     },
     highlightRequiredAreas() {
       const form = this.$refs.form as HTMLFormElement
@@ -130,21 +144,35 @@ export default (await import('vue')).defineComponent({
       ) as Array<HTMLInputElement | HTMLTextAreaElement>
 
       formControls.forEach((e) => {
-        
         e.classList.add('warning', 'red-glow')
 
-        setTimeout(() => e.classList.remove('warning', 'red-glow'), NOTIFICATION_DURATION)
+        setTimeout(
+          () => e.classList.remove('warning', 'red-glow'),
+          NOTIFICATION_DURATION
+        )
       })
     },
     handleInvalidDetails() {
-      console.log('emitting invalid-input-event')
       this.$emit('invalid-input-event')
       this.highlightRequiredAreas()
 
       setTimeout(() => {
-        console.log('emitting close-self-event')
         this.$emit('close-self-event')
       }, NOTIFICATION_DURATION)
+    },
+    createOrder() {
+      const form = this.$refs.form as HTMLFormElement
+      const formControls = Array.from(
+        form.querySelectorAll('[required]')
+      ) as Array<HTMLInputElement | HTMLTextAreaElement>
+
+      let orderFormValues: { [key: string]: string } = {}
+
+      formControls.forEach((e) => {
+        orderFormValues[e.name] = e.value
+      })
+
+      this.$emit('create-order-event', orderFormValues)
     },
   },
 })

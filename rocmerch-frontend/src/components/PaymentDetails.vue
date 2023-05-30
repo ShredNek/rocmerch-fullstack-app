@@ -19,6 +19,7 @@
       <div class="form-item">
         <label for="card-number">Card Number</label>
         <input
+          id="card-number"
           name="card-number"
           placeholder="•••• •••• •••• ••••"
           maxlength="16"
@@ -30,6 +31,7 @@
       <div class="form-item">
         <label for="expiration">Expiration (MM/YY)</label>
         <input
+          id="expiration"
           name="expiration"
           :placeholder="`MM / YY, eg 09/${date}`"
           maxlength="5"
@@ -39,6 +41,7 @@
       <div class="form-item">
         <label for="card-security-code">Card Security Code</label>
         <input
+          id="card-security-code"
           name="card-security-code"
           placeholder="CSC, e.g. 123"
           maxlength="3"
@@ -46,8 +49,16 @@
         />
       </div>
     </div>
-    <button class="link red-glow animated" @click.prevent="handleClick">NEXT</button>
+    <button class="link red-glow animated" @click.prevent="handleClick">
+      PAY NOW
+    </button>
   </form>
+  <p class="disclaimer">
+    NOTE: The data you enter here can - and should - be fake; None of it will be
+    saved to the database, cause y'know, that would make me a criminal for
+    taking bank credit card details and then not following through with any
+    shipment of my hypothetical stock. Anyways, continue through!
+  </p>
 </template>
 
 <script lang="ts">
@@ -56,7 +67,7 @@ import { useRouter } from 'vue-router'
 
 export default (await import('vue')).defineComponent({
   name: 'PaymentDetails',
-  emits: ['invalid-input-event', 'close-self-event'],
+  emits: ['invalid-input-event', 'close-self-event', 'send-email-event'],
 
   setup() {
     const router = useRouter()
@@ -65,9 +76,6 @@ export default (await import('vue')).defineComponent({
       router,
       date,
     }
-  },
-  mounted() {
-    console.log(this.date)
   },
   methods: {
     checkFormDetailsValidity(
@@ -83,9 +91,9 @@ export default (await import('vue')).defineComponent({
           }
         }
 
-        if (e.name === "expiration") {
-          if (e.value.charAt(2) !== "/") {
-            console.log("gaddeem")
+        if (e.name === 'expiration') {
+          if (e.value.charAt(2) !== '/') {
+            console.log('gaddeem')
             isValid = false
             return
           }
@@ -93,12 +101,11 @@ export default (await import('vue')).defineComponent({
           const userYearInput = Number(e.value.substring(3))
 
           if (userYearInput < Number(this.date)) {
-            console.log("use a valid year ya gronk")
+            console.log('use a valid year ya gronk')
             isValid = false
             return
           }
         }
-
       })
       return isValid
     },
@@ -108,9 +115,12 @@ export default (await import('vue')).defineComponent({
         form.querySelectorAll('input, textarea')
       ) as Array<HTMLInputElement | HTMLTextAreaElement>
 
-      this.checkFormDetailsValidity(formControls)
-        ? this.router.push('/checkout/finish')
-        : this.handleInvalidDetails()
+      if (this.checkFormDetailsValidity(formControls)) {
+        this.$emit("send-email-event")
+        this.router.push('/checkout/finish')
+      } else {
+        this.handleInvalidDetails()
+      }
     },
     highlightRequiredAreas() {
       const form = this.$refs.form as HTMLFormElement
@@ -128,12 +138,10 @@ export default (await import('vue')).defineComponent({
       })
     },
     handleInvalidDetails() {
-      console.log('emitting invalid-input-event')
       this.$emit('invalid-input-event')
       this.highlightRequiredAreas()
 
       setTimeout(() => {
-        console.log('emitting close-self-event')
         this.$emit('close-self-event')
       }, NOTIFICATION_DURATION)
     },

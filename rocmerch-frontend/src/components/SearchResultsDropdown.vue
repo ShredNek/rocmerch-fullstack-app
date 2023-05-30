@@ -4,7 +4,10 @@
     :class="['search-bar-dropdown', 'dropdown', isOpen ? 'open' : '']"
   >
     <div class="items">
-      <LoadingSpinner v-if="searchResults && searchResults.length === 0" class="loading"/>
+      <LoadingSpinner
+        v-if="searchResults && searchResults.length === 0"
+        class="loading"
+      />
       <router-link
         v-else-if="searchResults && searchResults.length >= 1"
         v-for="item in searchResults.slice(0, 5)"
@@ -13,7 +16,7 @@
       >
         <OrderSummaryItem
           :item="item"
-          itemImage="/src/assets/images/Butterfly_Draft2.jpg"
+          :itemImage="handleDynamicUrl(item)"
           :itemIndividualPrice="item.price"
           :itemName="item.name"
         />
@@ -26,7 +29,7 @@
 import OrderSummaryItem from '../components/OrderSummaryItem.vue'
 import LoadingSpinner from './LoadingSpinner.vue'
 import { PropType } from 'vue'
-import { MerchandiseItemInterface } from '../GLOBALS'
+import { generateDynamicUrl, MerchandiseItemInterface } from '../GLOBALS'
 
 export default (await import('vue')).defineComponent({
   name: 'SearchResultsDropdown',
@@ -37,18 +40,23 @@ export default (await import('vue')).defineComponent({
   props: {
     isOpen: { type: Boolean, required: true },
     searchResults: {
-      type: [] as PropType<MerchandiseItemInterface[]> ,
+      type: [] as PropType<MerchandiseItemInterface[]>,
       required: false,
+    },
+  },
+  methods: {
+    handleDynamicUrl(item: MerchandiseItemInterface) {
+      return generateDynamicUrl(item, import.meta.url)
     },
   },
   watch: {
     searchResults(n) {
       // console.log(n)
-    // console.clear()
+      // console.clear()
     },
   },
   mounted() {
     // console.clear()
-  }
+  },
 })
 </script>

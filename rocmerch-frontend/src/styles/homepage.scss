@@ -1,14 +1,28 @@
 @font-face {
   font-family: Raleway;
-  src: url(../assets/fonts/Raleway-Regular.ttf);
-  font-weight: normal;
+  src: url(../assets/fonts/Raleway-Bold.ttf);
+  font-weight: 700;
   font-style: normal;
 }
 
 @font-face {
   font-family: Raleway;
-  src: url(../assets/fonts/Raleway-Bold.ttf);
-  font-weight: bold;
+  src: url(../assets/fonts/Raleway-Regular.ttf);
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Raleway;
+  src: url(../assets/fonts/Raleway-Light.ttf);
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Raleway;
+  src: url(../assets/fonts/Raleway-Thin.ttf);
+  font-weight: 100;
   font-style: normal;
 }
 
@@ -37,6 +51,7 @@ $default-border-radius: 5px;
 *::after {
   box-sizing: border-box;
   font-family: Raleway;
+  font-weight: 500;
   letter-spacing: 0.025em;
 }
 
@@ -131,7 +146,7 @@ svg {
 
   h1 {
     font-size: clamp(2rem, 0.25rem + 2.5vw, 4rem);
-    font-weight: normal;
+    font-weight: 500;
     text-align: center;
     margin: 1em;
   }
@@ -350,7 +365,7 @@ $border-default: 1px lighten($main-dark, 80%) solid;
         }
 
         .price {
-          font-weight: bold;
+          font-weight: 700;
         }
 
         button {
@@ -498,6 +513,7 @@ dialog {
 }
 
 #search-bar-dropdown {
+  width: 80vw;
 
   @media (max-width: 500px) {
     width: 100vw;
@@ -522,6 +538,7 @@ dialog {
     min-height: 100px;
     height: min-content;
     max-height: 500px;
+
     overflow-y: hidden;
 
     & > a {
@@ -538,8 +555,7 @@ dialog {
     padding: 1em 2em;
     min-height: 100px;
     max-height: 100px;
-
-    
+    max-width: 100%;
   }
 }
 
@@ -648,7 +664,8 @@ dialog {
   color: $main-light;
 
   .video-overlay {
-    height: 100%;
+    top: -2px;
+    height: calc(100% + 3px);
     width: 100%;
     position: absolute;
     background: linear-gradient($main-dark, $main-dark-transparent);
@@ -692,7 +709,7 @@ dialog {
 }
 
 h2.section-header {
-  font-weight: normal;
+  font-weight: 500;
   text-align: center;
   font-size: clamp(1.5em, 1em + 4vw, 5em);
   padding: 0 1em;
@@ -721,7 +738,7 @@ h2.section-header {
   h3.individual-item {
     padding-top: 0.5em;
     font-style: italic;
-    font-weight: normal;
+    font-weight: 500;
     letter-spacing: 0.08em;
   }
 
@@ -773,8 +790,12 @@ h2.section-header {
     width: 100%;
   }
 
+  h2 {
+    font-weight: 700;
+  }
+
   p {
-    font-size: clamp(1em, 0.5em + 2vw, 2em);
+    font-size: clamp(1em, 0.3em + 1.5vw, 1.5em);
     padding: 0 2em;
   }
 
@@ -793,7 +814,7 @@ h2.section-header {
     .quantity,
     .add-to-cart {
       height: 100%;
-      font-weight: bold;
+      font-weight: 700;
       width: 40%;
     }
 
@@ -883,7 +904,7 @@ h2.section-header {
       }
 
       h2:last-child {
-        font-weight: normal;
+        font-weight: 500;
         font-size: 1.75em;
       }
     }
@@ -1025,7 +1046,7 @@ footer {
     margin: 2rem 0 2rem 67%;
     width: 33%;
     padding: 0.75em;
-    font-weight: bold;
+    font-weight: 700;
     font-size: 1.25em;
     letter-spacing: 0.1em;
     text-align: left;
@@ -1088,7 +1109,7 @@ footer {
     }
 
     h2 {
-      font-weight: normal;
+      font-weight: 500;
       letter-spacing: 0.05em;
     }
 
@@ -1104,6 +1125,7 @@ footer {
         padding: 1em 0.5em;
 
         &::placeholder {
+          font-weight: 300;
           color: lighten($main-grey, 10%);
         }
       }
@@ -1135,6 +1157,12 @@ footer {
         }
       }
     }
+
+    .disclaimer {
+      color: $main-grey;
+      font-weight: 100;
+      text-align: justify;
+    }
   }
 
   .cart {
@@ -1158,14 +1186,14 @@ footer {
 
       & > *:last-child {
         font-size: 1.5em;
-        font-weight: normal;
+        font-weight: 500;
       }
     }
 
     .shipping {
       & > div > *:last-child {
         color: $main-grey;
-        font-weight: normal;
+        font-weight: 500;
         font-style: italic;
       }
     }
@@ -1175,7 +1203,7 @@ footer {
 
       & > *:last-child {
         font-size: 3em;
-        font-weight: normal;
+        font-weight: 500;
       }
     }
   }
@@ -1186,14 +1214,23 @@ footer {
 
   .thank-you-message {
     text-align: center;
+    width: fit-content;
+
+
+    .header {
+      font-weight: 500;
+      letter-spacing: .1em;
+      color: $main-grey;
+    }
 
     h2 {
-      font-weight: bold;
+      font-weight: 700;
     }
 
     img {
-      height: 400px;
-      border: 4px solid black;
+      padding: 2em 0;
+      width: 80%;
+      object-fit: scale-down;
       border-radius: 5px;
     }
   }
@@ -1268,14 +1305,14 @@ footer {
       display: flex;
       margin: 0;
       width: auto;
-      font-weight: normal;
+      font-weight: 500;
     }
 
     p {
       width: fit-content;
       padding-right: 1rem;
       font-size: 0.75em;
-      font-weight: bold;
+      font-weight: 700;
     }
 
     & > * {
@@ -1346,7 +1383,7 @@ $feedback-left: 10%;
 
   p {
     margin-top: -25px;
-    font-weight: bold;
+    font-weight: 700;
     letter-spacing: 0.1em;
     font-size: 1.25em;
     color: $main-light;

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1 class="email-header">
+      Ripples Of Change - Official Merchandise Website
+    </h1>
+    <div class="email-content">
+      <div class="order-heading">
+        <h2>
+          Thank you, {NAME_FOR_ORDER}. <br />
+          your order is on the way!
+        </h2>
+      </div>
+      <div class="order-subheadings">
+        <p>We have finished processing your order</p>
+        <h3>ORDER IMFORMATION</h3>
+      </div>
+      <div class="order-details">
+        <div class="product-heading">
+          <p>Product</p>
+        </div>
+        <div class="quantity-heading">
+          <p>Quantity</p>
+        </div>
+        <div class="price-heading">
+          <p>Price</p>
+        </div>
+        <div class="all-items">
+          <div class="item-details">
+            <div class="item-name"><p>{ITEM_NAME}</p></div>
+            <div class="item-quantity"><p>{ITEM_QUANTITY}</p></div>
+            <div class="item-price"><p>{ITEM_PRICE}</p></div>
+          </div>
+        </div>
+        <div class="subtotal"><p>Subtotal:</p></div>
+        <div class="subtotal-price"><p>$ {SUBTOTAL}</p></div>
+        <div class="shipping"><p>Shipping:</p></div>
+        <div class="shipping-price"><p>$ {SHIPPING}</p></div>
+        <div class="total"><p>Total:</p></div>
+        <div class="total-price"><p>$ {TOTAL}</p></div>
+      </div>
+      <div class="shipping-address">
+        <h3>Shipping Address</h3>
+        <div class="address">
+          <p>{NAME_FOR_ORDER}</p>
+          <p>{ADDRESS_FOR_ORDER}</p>
+          <p>{EMAIL_FOR_ORDER}</p>
+          <p>{NUMBER_FOR_ORDER}</p>
+        </div>
+      </div>
+      <h3 class="order-footer">Thank you for your shopping with us!</h3>
+    </div>
+  </body>
+  <style>
+    :root {
+      --main-grey: #676060;
+      --light-grey: #dbd6d6;
+      --main-white: #ffffff;
+    }
+
+    *,
+    *::before,
+    *::after {
+      font-family: Raleway;
+      letter-spacing: 0.025em;
+      box-sizing: border-box;
+    }
+
+    p {
+      font-size: 0.75em;
+    }
+
+    body {
+      margin: 0;
+      min-width: 475px;
+      overflow: scroll;
+    }
+
+    .email-header,
+    .email-content {
+      margin-top: 3rem;
+      width: 80%;
+    }
+
+    .email-header {
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .email-content {
+      margin: 3rem auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 800px;
+      border: 2px solid var(--main-grey);
+      border-radius: 5px;
+      /* overflow: hidden; */
+    }
+
+    .order-heading {
+      width: 100%;
+      padding: 2em;
+      background-color: var(--main-grey);
+      color: var(--main-white);
+      text-align: center;
+    }
+
+    .order-heading > h2 {
+      font-weight: 500;
+    }
+
+    .order-subheadings {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: left;
+    }
+
+    .order-subheadings > * {
+      padding: 1rem 2rem;
+      margin: auto;
+      margin-left: 0;
+    }
+
+    .order-subheadings > *:first-child {
+      padding-top: 3rem;
+      font-weight: 300;
+      font-size: 1em;
+    }
+
+    /*
+
+        ORDER DETAILS
+
+         */
+
+    .order-details {
+      width: 80%;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: auto auto auto auto auto;
+      grid-template-areas:
+        "product-heading quantity-heading price-heading"
+        "all-items all-items all-items"
+        "subtotal subtotal subtotal-price"
+        "shipping shipping shipping-price"
+        "total total total-price";
+      margin: 1rem 0;
+      border: 2px solid var(--light-grey);
+      border-radius: 5px;
+    }
+
+    .order-details > * {
+      min-width: 100px;
+      height: 50px;
+      /* outline: 1px solid var(--light-grey); */
+    }
+
+    .order-details > *:nth-child(1) {
+      width: 33.33%;
+    }
+    .order-details > *:nth-child(2) {
+      width: 33.33%;
+    }
+    .order-details > *:nth-child(3) {
+      width: 33.33%;
+    }
+
+    .product-heading,
+    .quantity-heading,
+    .price-heading,
+    .subtotal,
+    .shipping,
+    .total {
+      display: flex;
+      align-items: center;
+    }
+
+    .product-heading > p,
+    .quantity-heading > p,
+    .price-heading > p,
+    .subtotal > p,
+    .shipping > p,
+    .total > p {
+      margin-left: 1rem;
+      font-weight: bold;
+    }
+
+    /* * * * * * * * * * */
+    /* GRID AREA SETTER */
+    /* * * * * * * * * */
+
+    .product-heading {
+      grid-area: product-heading;
+    }
+    .quantity-heading {
+      grid-area: quantity-heading;
+    }
+    .price-heading {
+      grid-area: price-heading;
+    }
+    .subtotal {
+      grid-area: subtotal;
+    }
+    .shipping {
+      grid-area: shipping;
+    }
+    .total {
+      grid-area: total;
+    }
+    .subtotal-price {
+      grid-area: subtotal-price;
+    }
+    .shipping-price {
+      grid-area: shipping-price;
+    }
+    .total-price {
+      grid-area: total-price;
+    }
+
+    .all-items {
+      grid-area: all-items;
+      display: flex;
+      flex-direction: column;
+      height: fit-content;
+    }
+
+    .item-details > * {
+      outline: 1px solid var(--light-grey);
+    }
+
+    .item-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: auto;
+      grid-template-areas: "item-name item-quantity item-price";
+      min-height: 50px;
+      width: 100%;
+    }
+
+    /* * * * * * * * * * */
+    /* GRID AREA SETTER */
+    /* * * * * * * * * */
+
+    .item-name {
+      grid-area: item-name;
+    }
+    .item-quantity {
+      grid-area: item-quantity;
+    }
+    .item-price {
+      grid-area: item-price;
+    }
+
+    .item-quantity,
+    .item-price {
+      height: 100%;
+      width: 100%;
+      /* outline: 2px solid var(--main-grey); */
+    }
+
+    /* * * * * * * * * * */
+    /* INDIVIDUAL ITEMS */
+    /* * * * * * * * * */
+
+    .item-name > p,
+    .item-quantity > p,
+    .item-price > p,
+    .subtotal-price > p,
+    .shipping-price > p,
+    .total-price > p {
+      margin: 1em;
+      word-break: break-all;
+      font-size: 0.75em;
+    }
+
+    /* * * * * * * * * * */
+    /* SHIPPING ADDRESS */
+    /* * * * * * * * * */
+
+    .shipping-address {
+      padding: 1rem 0;
+      width: 100%;
+    }
+
+    .shipping-address > h3 {
+      font-weight: 700;
+      padding: 0 2rem;
+    }
+
+    .shipping-address > .address {
+      width: 80%;
+      margin: auto;
+      min-height: 100px;
+      border: 2px dashed var(--light-grey);
+      border-radius: 5px;
+    }
+
+    .shipping-address > .address > p {
+      font-style: italic;
+      padding-left: 1em;
+    }
+
+    /* * * * * */
+    /* FOOTER */
+    /* * * * */
+
+    .order-footer {
+      text-align: center;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      margin: 2rem 2rem 3rem;
+    }
+  </style>
+</html>

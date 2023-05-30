@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1 class="email-header">
+      Ripples Of Change - Official Merchandise Website
+    </h1>
+    <div class="email-content">
+      <div class="order-heading">
+        <h2>
+          Thank you, {NAME_FOR_ORDER}. <br />
+          your order is on the way!
+        </h2>
+      </div>
+      <div class="order-subheadings">
+        <p>We have finished processing your order</p>
+        <h3>ORDER IMFORMATION</h3>
+      </div>
+      <table class="order-details">
+        <tbody>
+          <tr>
+            <th class="product-heading">
+              <p>Product</p>
+            </th>
+            <th class="quantity-heading">
+              <p>Quantity</p>
+            </th>
+            <th class="price-heading">
+              <p>Price</p>
+            </th>
+          </tr>
+          <!-- INSERT DYNAMIC ITEMS AS TR'S HERE -->
+          <tr class="item-details">
+            <td class="item-name"><p>{ITEM_NAME}</p></td>
+            <td class="item-quantity"><p>{ITEM_QUANTITY}</p></td>
+            <td class="item-price"><p>{ITEM_PRICE}</p></td>
+          </tr>
+          <!-- INSERT DYNAMIC ITEMS HERE -->
+          <tr>
+            <th class="subtotal" colspan="2"><p>Subtotal:</p></th>
+            <td class="subtotal-price"><p>$ {SUBTOTAL}</p></td>
+          </tr>
+          <tr>
+            <th class="shipping" colspan="2"><p>Shipping:</p></th>
+            <td class="shipping-price"><p>$ {SHIPPING}</p></td>
+          </tr>
+          <tr>
+            <th class="total" colspan="2"><p>Total:</p></th>
+            <td class="total-price"><p>$ {TOTAL}</p></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="shipping-address">
+        <h3>Shipping Address</h3>
+        <div class="address">
+          <p>{NAME_FOR_ORDER}</p>
+          <p>{ADDRESS_FOR_ORDER}</p>
+          <p>{EMAIL_FOR_ORDER}</p>
+          <p>{NUMBER_FOR_ORDER}</p>
+        </div>
+      </div>
+      <h3 class="order-footer">Thank you for your shopping with us!</h3>
+    </div>
+  </body>
+
+  <style>
+    :root {
+      --main-grey: #676060;
+      --light-grey: #dbd6d6;
+      --main-white: #ffffff;
+    }
+
+    *,
+    *::before,
+    *::after {
+      font-family: Raleway;
+      letter-spacing: 0.025em;
+      box-sizing: border-box;
+    }
+
+    p {
+      font-size: 0.75em;
+    }
+
+    body {
+      margin: 0;
+      min-width: 475px;
+      overflow: scroll;
+    }
+
+    .email-header,
+    .email-content {
+      margin-top: 3rem;
+      width: 80%;
+    }
+
+    .email-header {
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .email-content {
+      margin: 3rem auto;
+      max-width: 800px;
+      border: 2px solid #676060;
+      border-radius: 5px;
+    }
+
+    .order-heading {
+      width: 100%;
+      padding: 2em;
+      background-color: #676060;
+      color: #ffffff;
+      text-align: center;
+    }
+
+    .order-heading > h2 {
+      font-weight: 500;
+    }
+
+    .order-subheadings {
+      width: 100%;
+    }
+
+    .order-subheadings > * {
+      padding: 1rem 2rem;
+      margin: auto;
+      margin-left: 0;
+    }
+
+    .order-subheadings > *:first-child {
+      padding-top: 3rem;
+      font-weight: 300;
+      font-size: 1em;
+    }
+
+    .order-details {
+      width: 80%;
+      margin: 1rem auto;
+      border: 2px solid #dbd6d6;
+      border-radius: 5px;
+      border-spacing: 0px;
+      border-collapse: separate;
+    }
+
+    tbody > tr > * {
+      min-width: 100px;
+      height: 50px;
+      border: 1px solid #dbd6d6;
+      text-align: left;
+    }
+
+    tbody > tr > *:nth-child(1),
+    tbody > tr > *:nth-child(2),
+    tbody > tr > *:nth-child(3) {
+      width: 33.33%;
+    }
+
+    .product-heading,
+    .quantity-heading,
+    .price-heading,
+    .subtotal,
+    .shipping,
+    .total {
+    }
+
+    .product-heading > p,
+    .quantity-heading > p,
+    .price-heading > p,
+    .subtotal > p,
+    .shipping > p,
+    .total > p {
+      margin-left: 1rem;
+      font-weight: bold;
+    }
+
+    .all-items {
+      height: fit-content;
+    }
+
+    .item-details > * {
+      /* outline: 1px solid #dbd6d6; */
+    }
+
+    .item-details {
+      min-height: 50px;
+      width: 100%;
+    }
+
+    .item-quantity,
+    .item-price {
+      height: 100%;
+      width: 100%;
+      /* outline: 2px solid #676060; */
+    }
+
+    /* * * * * * * * * * */
+    /* INDIVIDUAL ITEMS */
+    /* * * * * * * * * */
+
+    .item-name > p,
+    .item-quantity > p,
+    .item-price > p,
+    .subtotal-price > p,
+    .shipping-price > p,
+    .total-price > p {
+      margin: 1em;
+      word-break: break-all;
+      font-size: 0.75em;
+    }
+
+    /* * * * * * * * * * */
+    /* SHIPPING ADDRESS */
+    /* * * * * * * * * */
+
+    .shipping-address {
+      padding: 1rem 0;
+      width: 100%;
+    }
+
+    .shipping-address > h3 {
+      font-weight: 700;
+      padding: 0 2rem;
+    }
+
+    .shipping-address > .address {
+      width: 80%;
+      margin: auto;
+      min-height: 100px;
+      border: 2px dashed #dbd6d6;
+      border-radius: 5px;
+    }
+
+    .shipping-address > .address > p {
+      font-style: italic;
+      padding-left: 1em;
+    }
+
+    /* * * * * */
+    /* FOOTER */
+    /* * * * */
+
+    .order-footer {
+      text-align: center;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      margin: 2rem 2rem 3rem;
+    }
+  </style>
+</html>

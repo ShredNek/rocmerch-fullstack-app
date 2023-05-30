@@ -13,7 +13,7 @@
         />
         <div class="image-container">
           <img
-            src="../assets/images/RipplesOfChange.jpg"
+            :src="imageUrl"
             :alt="`img for ${item.name}`"
           />
         </div>
@@ -135,6 +135,12 @@ export default (await import('vue')).defineComponent({
         (i: MerchandiseItemInterface) => i.id === currId
       )
     },
+  },
+  computed: {
+    imageUrl() {
+  return new URL(`../assets/images/items/${this.item.image}`, import.meta.url).href
+
+    }
   },
   watch: {
     $route() {

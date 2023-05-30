@@ -11,7 +11,7 @@
         v-for="item in userCart.merchItemsInCart"
         :key="item.merchandiseItem.id"
         :item="item"
-        itemImage="/src/assets/images/Butterfly_Draft2.jpg"
+        :itemImage="handleDynamicUrl(item.merchandiseItem)"
         :itemIndividualPrice="item.merchandiseItem.price"
         :itemName="item.merchandiseItem.name"
         :itemQuantity="item.quantity"
@@ -42,6 +42,7 @@ import LoadingSpinner from '../components/LoadingSpinner.vue'
 import OrderSummaryItem from '../components/OrderSummaryItem.vue'
 import ReactiveQuantityButton from '../components/ReactiveQuantityButton.vue'
 import { useUserCartAndDataStore } from '../stores/userCartAndData'
+import {MerchandiseItemInterface, generateDynamicUrl} from '../GLOBALS'
 
 export default (await import('vue')).defineComponent({
   name: 'EditCart',
@@ -65,5 +66,10 @@ export default (await import('vue')).defineComponent({
       return this.userCartAndData.calculateTotalPrice()
     },
   },
+  methods: {
+    handleDynamicUrl(item: MerchandiseItemInterface) {
+      return generateDynamicUrl(item, import.meta.url)
+    },
+  }
 })
 </script>

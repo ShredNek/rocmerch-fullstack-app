@@ -1,5 +1,8 @@
 import { defineStore } from 'pinia'
-import { MerchandiseItemWithQuantityInterface } from '../GLOBALS'
+import {
+  MerchandiseItemWithQuantityInterface,
+  MerchandiseOrderInterface,
+} from '../GLOBALS'
 
 export const useUserCartAndDataStore = defineStore('userCartAndData', {
   state: () => {
@@ -8,6 +11,7 @@ export const useUserCartAndDataStore = defineStore('userCartAndData', {
       emailForOrder: '',
       nameForOrder: '',
       totalPrice: 0,
+      ENTIRE_ORDER: {} as MerchandiseOrderInterface,
     }
   },
   persist: true,
@@ -48,13 +52,6 @@ export const useUserCartAndDataStore = defineStore('userCartAndData', {
           return item.merchandiseItem
         }
       })
-      // if (isThere) {
-      //   // console.log(`item of ${i.merchandiseItem.id} is present already`)
-      //   return true
-      // } else {
-      //   // console.log(`item of ${i.merchandiseItem.id} isn't here`)
-      //   return false
-      // }
     },
     addQuantityToItem(i: MerchandiseItemWithQuantityInterface) {
       const matchingItem = this.merchItemsInCart.find(
@@ -89,6 +86,9 @@ export const useUserCartAndDataStore = defineStore('userCartAndData', {
       )
 
       return parseFloat(total.toFixed(2)) // Convert to string with 2 decimal places
+    },
+    storeEntireOrder(order: MerchandiseOrderInterface) {
+      this.ENTIRE_ORDER = order
     },
   },
 })

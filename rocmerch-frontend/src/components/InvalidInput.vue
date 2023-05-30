@@ -22,7 +22,6 @@ export default (await import('vue')).defineComponent({
   },
   computed: {
     checkIfOpenAndSetStyles() {
-      console.log(this.isOpen)
       return this.isOpen ? true : false
     },
   },

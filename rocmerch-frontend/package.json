@@ -21,6 +21,7 @@
   "devDependencies": {
     "@types/node": "^20.2.1",
     "@types/nodemailer": "^6.4.8",
+    "@types/webpack-env": "^1.18.1",
     "@vitejs/plugin-vue": "^4.1.0",
     "axios": "^1.4.0",
     "cors": "^2.8.5",
@@ -30,6 +31,7 @@
     "pinia-plugin-persistedstate": "^3.1.0",
     "typescript": "^5.0.2",
     "vite": "^4.3.0",
+    "vite-require": "^0.2.3",
     "vue-router": "^4.0.13",
     "vue-tsc": "^1.2.0"
   },
