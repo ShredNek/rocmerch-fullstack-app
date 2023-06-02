@@ -8,7 +8,9 @@
 </template>
 
 <script lang="ts">
-export default (await import('vue')).defineComponent({
+import { defineComponent, PropType } from 'vue';
+
+export default defineComponent({
   name: 'ReactiveQuantityButton',
   props: {
     quantity: {
@@ -16,7 +18,7 @@ export default (await import('vue')).defineComponent({
       required: true,
     },
     onClickBubble: {
-      type: Function,
+      type: Function as PropType<((payload: MouseEvent) => void)>,
       required: false,
     },
     buttonText: {

@@ -14,4 +14,11 @@ export default defineConfig({
       },
     }),
   ],
+  optimizeDeps: {
+    include: ['@ffmpeg/ffmpeg', 'src/assets/videos/VisualiserEdited_D1.mov'],
+  },
+  assetsInclude: ['**/*.mov'],
+  build: {
+    target: 'esnext',
+  },
 })

@@ -11,14 +11,14 @@
       <router-link
         v-else-if="searchResults && searchResults.length >= 1"
         v-for="item in searchResults.slice(0, 5)"
-        :key="item.id"
-        :to="`/item/${item.category}/${item.id}`"
+        :key="item.merchandiseItem.id"
+        :to="`/item/${item.merchandiseItem.category}/${item.merchandiseItem.id}`"
       >
         <OrderSummaryItem
           :item="item"
-          :itemImage="handleDynamicUrl(item)"
-          :itemIndividualPrice="item.price"
-          :itemName="item.name"
+          :itemImage="handleDynamicUrl(item.merchandiseItem)"
+          :itemIndividualPrice="item.merchandiseItem.price"
+          :itemName="item.merchandiseItem.name"
         />
       </router-link>
     </div>
@@ -29,7 +29,7 @@
 import OrderSummaryItem from '../components/OrderSummaryItem.vue'
 import LoadingSpinner from './LoadingSpinner.vue'
 import { PropType } from 'vue'
-import { generateDynamicUrl, MerchandiseItemInterface } from '../GLOBALS'
+import { generateDynamicUrl, MerchandiseItemInterface, MerchandiseItemWithQuantityInterface } from '../GLOBALS'
 
 export default (await import('vue')).defineComponent({
   name: 'SearchResultsDropdown',
@@ -40,7 +40,7 @@ export default (await import('vue')).defineComponent({
   props: {
     isOpen: { type: Boolean, required: true },
     searchResults: {
-      type: [] as PropType<MerchandiseItemInterface[]>,
+      type: [] as PropType<MerchandiseItemWithQuantityInterface[]>,
       required: false,
     },
   },
@@ -51,12 +51,12 @@ export default (await import('vue')).defineComponent({
   },
   watch: {
     searchResults(n) {
-      // console.log(n)
-      // console.clear()
+      console.log(n)
+      console.clear()
     },
   },
   mounted() {
-    // console.clear()
+    console.clear()
   },
 })
 </script>

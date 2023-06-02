@@ -140,11 +140,13 @@ public class MerchandiseOrdersController {
 
 
     @PostMapping("/send-email-for-order-id/{id}")
-    public void sendEmail(@PathVariable Long id) throws Exception {
+    public String sendEmail(@PathVariable Long id) throws Exception {
         var currOrder = getShoppingCartById(id);
+        var toAddressForOrder = currOrder.map(MerchandiseOrders::getEmailForOrder).orElseThrow(() -> new IllegalStateException("Order is null"));
         var gMailer = new GMailerService();
         gMailer.composeHtmlEmailTemplateFromMerchandiseOrder(currOrder.orElseThrow());
-        gMailer.sendEmail(gMailer.getEmailHeader(), gMailer.getEmailAsHtmlString());
+        gMailer.sendEmail(gMailer.getEmailHeader(), gMailer.getEmailAsHtmlString(), toAddressForOrder);
+        return "Email successfully sent to "+toAddressForOrder;
     }
 }
 

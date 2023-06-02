@@ -17,28 +17,32 @@ public class MerchandiseItemsController {
     private MerchandiseItemsRepository merchandiseItemsRepository;
 
     @PostMapping("/new")
-    MerchandiseItems newItem(@RequestBody MerchandiseItems newItem) {
-        return merchandiseItemsRepository.save(newItem);
+    public String newItem(@RequestBody MerchandiseItems newItem) throws Exception {
+        try {
+            merchandiseItemsRepository.save(newItem);
+        } catch (Exception e) {
+            return e.toString();
+        }
+        return "Saved new "+newItem.getName()+" to id: "+newItem.getId();
     }
 
     @GetMapping("/all")
-    List<MerchandiseItems> getAllMerchandiseItems() {
+    public List<MerchandiseItems> getAllMerchandiseItems() {
         return merchandiseItemsRepository.findAll();
     }
 
     @GetMapping("/get-by-id/{id}")
-    MerchandiseItems getMerchItemById(@PathVariable Long id) {
-        return merchandiseItemsRepository.findById(id)
-                .orElseThrow(() -> new ItemNotFoundException(id));
+    public MerchandiseItems getMerchItemById(@PathVariable Long id) {
+        return merchandiseItemsRepository.findById(id).orElseThrow(() -> new ItemNotFoundException(id));
     }
 
     @GetMapping("/get-by-category/{category}")
-    List<MerchandiseItems> getMerchItemsByCategory(@PathVariable("category") String category) {
+    public List<MerchandiseItems> getMerchItemsByCategory(@PathVariable("category") String category) {
         return merchandiseItemsRepository.getMerchandiseItemsByCategory(category);
     }
 
     @GetMapping("/get-by-name/{name}")
-    ArrayList<Optional<MerchandiseItems>> getMerchItemsByName(@PathVariable("name") String nameInput) {
+    public ArrayList<Optional<MerchandiseItems>> getMerchItemsByName(@PathVariable("name") String nameInput) {
 
         List<MerchandiseItems> allItems = merchandiseItemsRepository.findAll();
         HashMap<Long, Integer> matchingWords = new HashMap<>();
@@ -71,8 +75,7 @@ public class MerchandiseItemsController {
 
         while (maxLetterMatch.get() != 0) {
             matchingWords.forEach((id, numberOfMatches) -> {
-                if (numberOfMatches.equals(maxLetterMatch.get())
-                        && !sortedMatchedWords.contains(merchandiseItemsRepository.findById(id))) {
+                if (numberOfMatches.equals(maxLetterMatch.get()) && !sortedMatchedWords.contains(merchandiseItemsRepository.findById(id))) {
                     sortedMatchedWords.add(merchandiseItemsRepository.findById(id));
                 }
             });
@@ -82,16 +85,15 @@ public class MerchandiseItemsController {
     }
 
     @PutMapping("/put/{id}")
-    MerchandiseItems updateItem(@RequestBody MerchandiseItems newItem, @PathVariable Long id) {
-        return merchandiseItemsRepository.findById(id)
-                .map(item -> {
-                    item.setName(newItem.getName());
-                    item.setItemDescription(newItem.getItemDescription());
-                    item.setCategory(newItem.getCategory());
-                    item.setPrice(newItem.getPrice());
-                    item.setImage(newItem.getImage());
-                    return merchandiseItemsRepository.save(item);
-                }).orElseThrow(() -> new ItemNotFoundException(id));
+    public MerchandiseItems updateItem(@RequestBody MerchandiseItems newItem, @PathVariable Long id) {
+        return merchandiseItemsRepository.findById(id).map(item -> {
+            item.setName(newItem.getName());
+            item.setItemDescription(newItem.getItemDescription());
+            item.setCategory(newItem.getCategory());
+            item.setPrice(newItem.getPrice());
+            item.setImage(newItem.getImage());
+            return merchandiseItemsRepository.save(item);
+        }).orElseThrow(() -> new ItemNotFoundException(id));
 
     }
 

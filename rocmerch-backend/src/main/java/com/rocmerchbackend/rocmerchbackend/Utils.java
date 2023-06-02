@@ -106,7 +106,7 @@ public class Utils {
                             font-weight: 500;
                           "
                         >
-                          Thank you, {NAME_FOR_ORDER}.
+                          Thank you, {FIRST_NAME}.
                           <br
                             style="
                               font-family: Raleway;

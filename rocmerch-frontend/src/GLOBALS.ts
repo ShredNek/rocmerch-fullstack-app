@@ -42,7 +42,7 @@ export const isValidEmail = (email: string) => {
 
 export async function getAllItems() {
   try {
-    const url = `http://localhost:8080/items/all`
+    const url = `https://rocmerch-backend-nxbvldpslq-ts.a.run.app/items/all`
     return await axios.get(url)
   } catch (e) {
     console.log(e)

@@ -5,7 +5,8 @@ target/
 !**/src/test/**/target/
 
 ### APPLICATION PROPERTIES ###
-/application.properties
+application.properties
+client_secret_372423722108-phu5no9r09ntog927ll2nogc0erplott.apps.googleusercontent.com.json
 
 ### STS ###
 .apt_generated

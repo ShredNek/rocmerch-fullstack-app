@@ -1,5 +1,5 @@
 <template>
-  <InvalidInput :isOpen="isUserInputInvalid" />
+  <!-- <InvalidInput :isOpen="isUserInputInvalid" /> -->
   <section id="checkout">
     <div v-if="changingParam === 'user'" class="user details">
       <UserDetails

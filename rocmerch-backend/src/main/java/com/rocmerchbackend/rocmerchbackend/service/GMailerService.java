@@ -49,7 +49,7 @@ public class GMailerService {
             throws IOException {
         // Load client secrets.
         GoogleClientSecrets clientSecrets =
-                GoogleClientSecrets.load(jsonFactory, new InputStreamReader(GMailerService.class.getResourceAsStream("/client_secret_372423722108-phu5no9r09ntog927ll2nogc0erplott.apps.googleusercontent.com.json")));
+                GoogleClientSecrets.load(jsonFactory, new InputStreamReader(GMailerService.class.getResourceAsStream("/secret.YAML")));
 
         // Build flow and trigger user authorization request.
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
@@ -64,14 +64,14 @@ public class GMailerService {
         return credential;
     }
 
-    public void sendEmail(String subject, String userMessage) throws Exception {
+    public void sendEmail(String subject, String userMessage, String toEmailAddress) throws Exception {
 
         // Encode as MIME message
         Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
         MimeMessage email = new MimeMessage(session);
         email.setFrom(new InternetAddress(TEST_EMAIL_ADDRESS));
-        email.addRecipient(TO, new InternetAddress(TEST_EMAIL_ADDRESS));
+        email.addRecipient(TO, new InternetAddress(toEmailAddress));
         email.setSubject(subject);
         email.setContent(userMessage, "text/html");
 
@@ -118,8 +118,13 @@ public class GMailerService {
 
         setItemsAsHtmlString(String.valueOf(totalItems));
 
+        // They give us the full name with a whitespace between the first and
+        // family name, so we're just taking the first name for the email.
+        var firstNameForOrder = order.getNameForOrder().split(" ")[0];
         var emailTemplate = new Utils().getOrderShippedHtmlTemplate();
+
         emailTemplate = emailTemplate.replace("{CART_ITEMS}", getItemsAsHtmlString());
+        emailTemplate = emailTemplate.replace("{FIRST_NAME}", firstNameForOrder);
         emailTemplate = emailTemplate.replace("{NAME_FOR_ORDER}", order.getNameForOrder());
         emailTemplate = emailTemplate.replace("{SUBTOTAL}", order.getTotalPrice().toString());
         emailTemplate = emailTemplate.replace("{SHIPPING}", "0");
@@ -128,7 +133,7 @@ public class GMailerService {
         emailTemplate = emailTemplate.replace("{EMAIL_FOR_ORDER}", order.getEmailForOrder());
         emailTemplate = emailTemplate.replace("{NUMBER_FOR_ORDER}", order.getPhoneForOrder());
 
-        setEmailHeader("Thank you for your support, " + order.getNameForOrder() + ". :)");
+        setEmailHeader("Thank you for your support, " + firstNameForOrder + ". :)");
         setEmailAsHtmlString(emailTemplate);
     }
 
