@@ -134,10 +134,5 @@ export default {
       this.isSearchBarOpen = true
     },
   },
-  watch: {
-    isSearchBarOpen(c) {
-      console.log(c)
-    },
-  },
 }
 </script>

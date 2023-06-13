@@ -4,21 +4,20 @@
     :class="['search-bar-dropdown', 'dropdown', isOpen ? 'open' : '']"
   >
     <div class="items">
-      <LoadingSpinner
-        v-if="searchResults && searchResults.length === 0"
-        class="loading"
-      />
+      <div v-if="searchError || (searchResults && searchResults.length === 0)">
+        <LoadingSpinner class="loading" />
+        <p class="loading-notice">Searching the database... <br/> the first call may take up to 20 seconds.</p>
+      </div>
       <router-link
         v-else-if="searchResults && searchResults.length >= 1"
-        v-for="item in searchResults.slice(0, 5)"
-        :key="item.merchandiseItem.id"
-        :to="`/item/${item.merchandiseItem.category}/${item.merchandiseItem.id}`"
+        v-for="item in searchResults"
+        :key="item.id"
+        :to="`/item/${item.category}/${item.id}`"
       >
         <OrderSummaryItem
-          :item="item"
-          :itemImage="handleDynamicUrl(item.merchandiseItem)"
-          :itemIndividualPrice="item.merchandiseItem.price"
-          :itemName="item.merchandiseItem.name"
+          :itemImage="handleDynamicUrl(item)"
+          :itemIndividualPrice="item.price"
+          :itemName="item.name"
         />
       </router-link>
     </div>
@@ -29,7 +28,7 @@
 import OrderSummaryItem from '../components/OrderSummaryItem.vue'
 import LoadingSpinner from './LoadingSpinner.vue'
 import { PropType } from 'vue'
-import { generateDynamicUrl, MerchandiseItemInterface, MerchandiseItemWithQuantityInterface } from '../GLOBALS'
+import { generateDynamicUrl, MerchandiseItemInterface } from '../GLOBALS'
 
 export default (await import('vue')).defineComponent({
   name: 'SearchResultsDropdown',
@@ -37,10 +36,15 @@ export default (await import('vue')).defineComponent({
     OrderSummaryItem,
     LoadingSpinner,
   },
+  data() {
+    return {
+      searchError: false,
+    }
+  },
   props: {
     isOpen: { type: Boolean, required: true },
     searchResults: {
-      type: [] as PropType<MerchandiseItemWithQuantityInterface[]>,
+      type: [] as PropType<MerchandiseItemInterface[]>,
       required: false,
     },
   },
@@ -52,11 +56,15 @@ export default (await import('vue')).defineComponent({
   watch: {
     searchResults(n) {
       console.log(n)
-      console.clear()
+      if (n === undefined) {
+        this.searchError = true
+      }
+      this.searchError = false
+      // console.clear()
     },
   },
   mounted() {
-    console.clear()
+    // console.clear()
   },
 })
 </script>

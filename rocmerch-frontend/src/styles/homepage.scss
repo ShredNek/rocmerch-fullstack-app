@@ -543,6 +543,21 @@ dialog {
     }
   }
 
+  @keyframes color-fade {
+    0%, 100% {color: white;}
+
+    50% {color: $main-grey;}
+  }
+
+  .loading-notice {
+    text-align: center;
+    padding: 0 2em 2em;
+    color: white;
+    font-style: italic;
+    letter-spacing: .1em;
+    animation: color-fade 5s infinite ease-in-out 2s;
+  }
+
   .items {
     box-shadow: 1px 1px 25px black;
 
@@ -1452,4 +1467,22 @@ $feedback-left: 10%;
   &.open {
     bottom: 75px;
   }
+}
+
+// ? ? ? ? ? ? ? ? ? ? ? ? ? ?
+// ? Feedback Bubble Styles ?
+// ? ? ? ? ? ? ? ? ? ? ? ? ?
+
+#page-not-found {
+    background: white;
+    padding: 2em 4em;
+    text-align: center;
+
+ h1 {
+  font-weight: 700;
+ }
+
+ h2 {
+  font-size: 1em;
+ }
 }

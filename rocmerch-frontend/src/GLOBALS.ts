@@ -42,7 +42,7 @@ export const isValidEmail = (email: string) => {
 
 export async function getAllItems() {
   try {
-    const url = `https://rocmerch-backend-nxbvldpslq-ts.a.run.app/items/all`
+    const url = `${import.meta.env.VITE_BACKEND_SERVER_ENDPOINT}/items/all`
     return await axios.get(url)
   } catch (e) {
     console.log(e)
@@ -52,10 +52,12 @@ export async function getAllItems() {
 export async function getAllItemsThatMatchSearch(query: string) {
   if (query.length === 0) return
   try {
-    const url = `http://localhost:8080/items/get-by-name/${query}`
+    const url = `${
+      import.meta.env.VITE_BACKEND_SERVER_ENDPOINT
+    }/items/get-by-name/${query}`
     return await axios.get(url)
   } catch (e) {
-    console.log(e)
+    console.error(e)
   }
 }
 
@@ -83,7 +85,7 @@ export async function sendOrderAndReturnOrderId() {
   const order = useUserCartAndDataStore().ENTIRE_ORDER
   try {
     const idResponse = await axios.post(
-      'http://localhost:8080/orders/new',
+      `${import.meta.env.VITE_BACKEND_SERVER_ENDPOINT}/orders/new`,
       order
     )
     return extractNumberFromString(idResponse.data)
@@ -95,10 +97,33 @@ export async function sendOrderAndReturnOrderId() {
 export async function sendEmail(orderId: string | number) {
   try {
     await axios.post(
-      `http://localhost:8080/orders/send-email-for-order-id/${orderId}`
+      `${
+        import.meta.env.VITE_BACKEND_SERVER_ENDPOINT
+      }/orders/send-email-for-order-id/${orderId}`
     )
     console.log(`email sent to id ${orderId}!`)
   } catch (error) {
     console.error(error)
   }
+}
+
+export async function sendFeedback(feedback: string) {
+  try {
+    await axios.post(
+      `${import.meta.env.VITE_BACKEND_SERVER_ENDPOINT}/feedback/new`,
+      {
+        feedback: feedback,
+      }
+    )
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+export async function getCategoryOfItems(category: string | string[]) {
+  const url = `${
+    import.meta.env.VITE_BACKEND_SERVER_ENDPOINT
+  }/items/get-by-category/${category}`
+  const response = await axios.get(url)
+  return response.data
 }

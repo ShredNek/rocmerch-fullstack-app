@@ -1,16 +1,23 @@
 package com.rocmerchbackend.rocmerchbackend.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.rocmerchbackend.rocmerchbackend.FeedbackListener;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
+@EntityListeners(FeedbackListener.class)
 public class Feedback {
+
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String feedback;
-    private String timestamp;
+    private LocalDateTime timestamp;
+
+    @PrePersist
+    private void setTimestampAtInstance() {
+        this.timestamp = LocalDateTime.now();
+    }
 
     public Long getId() {
         return id;
@@ -28,11 +35,11 @@ public class Feedback {
         this.feedback = feedback;
     }
 
-    public String getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
 }

@@ -26,11 +26,11 @@ import CopyrightFooter from '../components/CopyrightFooter.vue'
 import FeedbackBubble from '../components/FeedbackBubble.vue'
 import MerchandiseItem from '../components/MerchandiseItem.vue'
 import LoadingSpinner from '../components/LoadingSpinner.vue'
-import axios from 'axios'
 import {
   MerchandiseItemInterface,
   uppercaseFirstLetter,
   removeHyphen,
+  getCategoryOfItems,
 } from '../GLOBALS'
 
 export default (await import('vue')).defineComponent({
@@ -50,29 +50,27 @@ export default (await import('vue')).defineComponent({
     }
   },
   async mounted() {
-    this.getCategoryOfItems()
+    this.items = await getCategoryOfItems(this.$route.params.category)
+    this.storeCategoryOfItems()
     this.validCategoryName = removeHyphen(
       uppercaseFirstLetter(this.$route.params.category)
     )
   },
   methods: {
-    async getCategoryOfItems() {
-      try {
-        const url = `http://localhost:8080/items/get-by-category/${this.$route.params.category}`
-        const response = await axios.get(url)
-        this.items = response.data
-        
-        const store = useCategoryItemsStore()
-        store.storeItems(this.items)
-      } catch (e) {
-        console.log(e)
-      }
+    storeCategoryOfItems() {
+      const store = useCategoryItemsStore()
+      store.storeItems(this.items)
     },
   },
   watch: {
-    $route() {
-      this.getCategoryOfItems()
-    }
-  }
+    async $route() {
+      this.storeCategoryOfItems()
+      this.validCategoryName = removeHyphen(
+      uppercaseFirstLetter(this.$route.params.category)
+    )
+      this.items = []
+      this.items = await getCategoryOfItems(this.$route.params.category)
+    },
+  },
 })
 </script>

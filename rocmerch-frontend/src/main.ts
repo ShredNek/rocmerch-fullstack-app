@@ -31,6 +31,12 @@ const router = createRouter({
   routes,
 })
 
+// good example:
+router.resolve({
+  name: 'pageNotFound',
+  params: { pathMatch: ['pageNotFound'] },
+}).href // '/not/found'
+
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 

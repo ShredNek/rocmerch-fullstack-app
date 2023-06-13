@@ -3,6 +3,7 @@ import ItemsByCategory from './views/ItemsByCategory.vue'
 import ItemsByID from './views/ItemsById.vue'
 import Checkout from './views/Checkout.vue'
 import EditCart from './views/EditCart.vue'
+import PageNotFound from './views/PageNotFound.vue'
 
 const routes = [
   {
@@ -29,6 +30,11 @@ const routes = [
     path: '/edit-cart',
     name: 'editCart',
     component: EditCart,
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'pageNotFound',
+    component: PageNotFound,
   },
 ]
 

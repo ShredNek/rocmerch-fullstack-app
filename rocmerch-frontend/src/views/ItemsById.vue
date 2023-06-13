@@ -2,25 +2,25 @@
   <section>
     <Header />
     <div class="shopping-section">
-      <div v-if="Object.keys(item).length === 0" class="item-card-container">
+      <div v-if="Object.keys(merchItem).length === 0" class="item-card-container">
         <LoadingSpinner />
       </div>
       <div v-else class="individual-merchandise-item">
         <AddedToCart
-          :itemName="item.name"
+          :itemName="merchItem.name"
           :itemQuantity="itemQuantity"
           :isOpen="isOpen"
         />
         <div class="image-container">
           <img
             :src="imageUrl"
-            :alt="`img for ${item.name}`"
+            :alt="`img for ${merchItem.name}`"
           />
         </div>
         <div class="item-details-container">
-          <h2 class="section-header">{{ item.name }}</h2>
-          <p>{{ item.itemDescription }}</p>
-          <h3 class="price">${{ item.price }}</h3>
+          <h2 class="section-header">{{ merchItem.name }}</h2>
+          <p>{{ merchItem.itemDescription }}</p>
+          <h3 class="price">${{ merchItem.price }}</h3>
           <div class="quantity-and-cart">
             <div class="quantity">
               <button class="quantity-adjust" @click="itemQuantity++">+</button>
@@ -60,9 +60,9 @@ import {
   MerchandiseItemInterface,
   MerchandiseItemWithQuantityInterface,
   uppercaseFirstLetter,
-  NOTIFICATION_DURATION
+  NOTIFICATION_DURATION,
+  getCategoryOfItems
 } from '../GLOBALS'
-import axios from 'axios'
 
 export default (await import('vue')).defineComponent({
   name: 'ItemsByCategory',
@@ -77,7 +77,7 @@ export default (await import('vue')).defineComponent({
   },
   data() {
     return {
-      item: {} as MerchandiseItemInterface,
+      merchItem: {} as MerchandiseItemInterface,
       itemQuantity: 1,
       itemWithQuantity: {} as MerchandiseItemWithQuantityInterface,
       isOpen: false,
@@ -85,7 +85,7 @@ export default (await import('vue')).defineComponent({
   },
   async mounted() {
     await this.getSelectedItem()
-    this.item.name = uppercaseFirstLetter(this.item.name)
+    this.merchItem.name = uppercaseFirstLetter(this.merchItem.name)
   },
   methods: {
     addToCart() {
@@ -93,11 +93,11 @@ export default (await import('vue')).defineComponent({
 
       let currItem = this.itemWithQuantity
       currItem.quantity = this.itemQuantity
-      currItem.merchandiseItem = this.item
+      currItem.merchandiseItem = this.merchItem
 
       const newItem = {
         quantity: this.itemQuantity,
-        merchandiseItem: this.item,
+        merchandiseItem: this.merchItem,
       }
 
       const isThere = userItemsAndDataStore.checkIfItemPresent(newItem)
@@ -120,7 +120,7 @@ export default (await import('vue')).defineComponent({
       if (item === undefined || item === null) {
         await this.loadItemFromDatabase(currentItemId)
       } else {
-        this.item = item
+        this.merchItem = item
       }
     },
     loadItemFromLocalStore(currId: number) {
@@ -128,17 +128,16 @@ export default (await import('vue')).defineComponent({
       return categoryItemsStore.categoryItems.find((i) => i.id === currId)
     },
     async loadItemFromDatabase(currId: number) {
-      const url = `http://localhost:8080/items/get-by-category/${this.$route.params.category}`
-      const response = await axios.get(url)
+      const response = await getCategoryOfItems(this.$route.params.categories)
 
-      this.item = response.data.find(
+      this.merchItem = response.data.find(
         (i: MerchandiseItemInterface) => i.id === currId
       )
     },
   },
   computed: {
     imageUrl() {
-  return new URL(`../assets/images/items/${this.item.image}`, import.meta.url).href
+  return new URL(`../assets/images/items/${this.merchItem.image}`, import.meta.url).href
 
     }
   },

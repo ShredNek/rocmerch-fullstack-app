@@ -1,5 +1,4 @@
 // TODO
 
-HIDE SECRETS W/ IMPORT.META
-Protect All Dynamic Routes
-Edge case all error handling (WITH SAM)
+HIDE SECRETS W/ IMPORT.META DONE
+Add default route DONE

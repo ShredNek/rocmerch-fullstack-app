@@ -1,6 +1,35 @@
 package com.rocmerchbackend.rocmerchbackend;
 
-public class Utils {
+import com.rocmerchbackend.rocmerchbackend.model.MerchandiseItems;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class UtilsFunctions {
+
+    public static List<MerchandiseItems> cachedMerchItems;
+
+    private static final Map<Long, MerchandiseItems> cachedMerchItemMap = new HashMap<>();
+
+    // Populate the cachedMerchItemMap using your existing list of cached items
+    public static void setCachedMerchItemMap() {
+        for (MerchandiseItems item : UtilsFunctions.cachedMerchItems) {
+            cachedMerchItemMap.put(item.getId(), item);
+        }
+    }
+
+    public static MerchandiseItems findCachedMerchItemById(Long id) {
+        return cachedMerchItemMap.get(id);
+    }
+
+    public static List<MerchandiseItems> getCachedMerchItems() {
+        return cachedMerchItems;
+    }
+
+    public static void setCachedMerchItems(List<MerchandiseItems> cachedMerchItems) {
+        UtilsFunctions.cachedMerchItems = cachedMerchItems;
+    }
 
     public String getItemsHtmlTemplate() {
         return itemsHtmlTemplate;
@@ -553,98 +582,98 @@ public class Utils {
             """;
 
     private String itemsHtmlTemplate = """
-                        <tr
-                class="item-details"
-                style="
-                font-family: Raleway;
-                letter-spacing: 0.025em;
-                box-sizing: border-box;
-                min-height: 50px;
-                width: 100%;
-                "
-                        >
-                    <td
-                class="item-name"
-                style="
-                font-family: Raleway;
-                letter-spacing: 0.025em;
-                box-sizing: border-box;
-                min-width: 100px;
-                height: 50px;
-                border: 1px solid #dbd6d6;
-                text-align: left;
-                width: 33.33%;
-                "
-                        >
-                      <p
-                        style="
-                font-family: Raleway;
-                letter-spacing: 0.025em;
-                box-sizing: border-box;
-                margin: 1em;
-                word-break: break-all;
-                font-size: 0.75em;
-                "
-                        >
-                        {ITEM_NAME}
-                        </p>
-                    </td>
-                    <td
-                class="item-quantity"
-                style="
-                font-family: Raleway;
-                letter-spacing: 0.025em;
-                box-sizing: border-box;
-                min-width: 100px;
-                height: 50px;
-                border: 1px solid #dbd6d6;
-                text-align: left;
-                height: 100%;
-                width: 100%;
-                width: 33.33%;
-                "
-                        >
-                      <p
-                        style="
-                font-family: Raleway;
-                letter-spacing: 0.025em;
-                box-sizing: border-box;
-                margin: 1em;
-                word-break: break-all;
-                font-size: 0.75em;
-                "
-                        >
-                        {ITEM_QUANTITY}
-                        </p>
-                    </td>
-                    <td
-                class="item-price"
-                style="
-                font-family: Raleway;
-                letter-spacing: 0.025em;
-                box-sizing: border-box;
-                min-width: 100px;
-                height: 50px;
-                border: 1px solid #dbd6d6;
-                text-align: left;
-                height: 100%;
-                width: 100%;
-                width: 33.33%;
-                "
-                        >
-                      <p
-                        style="
-                font-family: Raleway;
-                letter-spacing: 0.025em;
-                box-sizing: border-box;
-                margin: 1em;
-                word-break: break-all;
-                font-size: 0.75em;
-                "
-                        >
-                        {ITEM_PRICE}
-                        </p>
-                    </td>
-                  </tr>
-                  """;
+                    <tr
+            class="item-details"
+            style="
+            font-family: Raleway;
+            letter-spacing: 0.025em;
+            box-sizing: border-box;
+            min-height: 50px;
+            width: 100%;
+            "
+                    >
+                <td
+            class="item-name"
+            style="
+            font-family: Raleway;
+            letter-spacing: 0.025em;
+            box-sizing: border-box;
+            min-width: 100px;
+            height: 50px;
+            border: 1px solid #dbd6d6;
+            text-align: left;
+            width: 33.33%;
+            "
+                    >
+                  <p
+                    style="
+            font-family: Raleway;
+            letter-spacing: 0.025em;
+            box-sizing: border-box;
+            margin: 1em;
+            word-break: break-all;
+            font-size: 0.75em;
+            "
+                    >
+                    {ITEM_NAME}
+                    </p>
+                </td>
+                <td
+            class="item-quantity"
+            style="
+            font-family: Raleway;
+            letter-spacing: 0.025em;
+            box-sizing: border-box;
+            min-width: 100px;
+            height: 50px;
+            border: 1px solid #dbd6d6;
+            text-align: left;
+            height: 100%;
+            width: 100%;
+            width: 33.33%;
+            "
+                    >
+                  <p
+                    style="
+            font-family: Raleway;
+            letter-spacing: 0.025em;
+            box-sizing: border-box;
+            margin: 1em;
+            word-break: break-all;
+            font-size: 0.75em;
+            "
+                    >
+                    {ITEM_QUANTITY}
+                    </p>
+                </td>
+                <td
+            class="item-price"
+            style="
+            font-family: Raleway;
+            letter-spacing: 0.025em;
+            box-sizing: border-box;
+            min-width: 100px;
+            height: 50px;
+            border: 1px solid #dbd6d6;
+            text-align: left;
+            height: 100%;
+            width: 100%;
+            width: 33.33%;
+            "
+                    >
+                  <p
+                    style="
+            font-family: Raleway;
+            letter-spacing: 0.025em;
+            box-sizing: border-box;
+            margin: 1em;
+            word-break: break-all;
+            font-size: 0.75em;
+            "
+                    >
+                    {ITEM_PRICE}
+                    </p>
+                </td>
+              </tr>
+              """;
 }

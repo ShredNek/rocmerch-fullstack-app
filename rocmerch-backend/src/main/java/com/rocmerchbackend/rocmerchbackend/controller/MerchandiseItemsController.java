@@ -1,11 +1,16 @@
 package com.rocmerchbackend.rocmerchbackend.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rocmerchbackend.rocmerchbackend.UtilsFunctions;
 import com.rocmerchbackend.rocmerchbackend.model.MerchandiseItems;
 import com.rocmerchbackend.rocmerchbackend.exception.ItemNotFoundException;
 import com.rocmerchbackend.rocmerchbackend.repository.MerchandiseItemsRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.SyncFailedException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -16,14 +21,42 @@ public class MerchandiseItemsController {
     @Autowired
     private MerchandiseItemsRepository merchandiseItemsRepository;
 
-    @PostMapping("/new")
-    public String newItem(@RequestBody MerchandiseItems newItem) throws Exception {
+    @Transactional
+    @PostMapping(path = "/new", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public String newItem(@RequestBody String userItemInput) throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+
         try {
-            merchandiseItemsRepository.save(newItem);
+            MerchandiseItems[] itemsArray = objectMapper.readValue(userItemInput, MerchandiseItems[].class);
+
+            if (itemsArray.length == 1) {
+                MerchandiseItems singleItem = itemsArray[0];
+                merchandiseItemsRepository.save(singleItem);
+                return "Saved new " + singleItem.getName() + " to id: " + singleItem.getId();
+            } else {
+                List<MerchandiseItems> itemList = Arrays.asList(itemsArray);
+                var allUserItemNames = new ArrayList<String>();
+                var allUserItemIds = new ArrayList<Long>();
+
+                for (MerchandiseItems item : itemList) allUserItemNames.add(item.getName());
+
+                merchandiseItemsRepository.saveAll(itemList);
+
+                for (MerchandiseItems item : itemList) allUserItemIds.add(item.getId());
+
+                return "Saved these items: " + allUserItemNames.toString() + " to these id's: " + allUserItemIds.toString();
+            }
+        } catch (com.fasterxml.jackson.databind.exc.MismatchedInputException e) {
+            try {
+                MerchandiseItems singleItem = objectMapper.readValue(userItemInput, MerchandiseItems.class);
+                merchandiseItemsRepository.save(singleItem);
+                return "Saved new " + singleItem.getName() + " to id: " + singleItem.getId();
+            } catch (Exception ex) {
+                return ex.toString();
+            }
         } catch (Exception e) {
             return e.toString();
         }
-        return "Saved new "+newItem.getName()+" to id: "+newItem.getId();
     }
 
     @GetMapping("/all")
@@ -42,17 +75,22 @@ public class MerchandiseItemsController {
     }
 
     @GetMapping("/get-by-name/{name}")
-    public ArrayList<Optional<MerchandiseItems>> getMerchItemsByName(@PathVariable("name") String nameInput) {
-
-        List<MerchandiseItems> allItems = merchandiseItemsRepository.findAll();
-        HashMap<Long, Integer> matchingWords = new HashMap<>();
+    public List<MerchandiseItems> optimisedGetMerchItemsByName(@PathVariable("name") String nameInput) {
+        TreeMap<Long, Integer> matchingWords = new TreeMap<>();
         String[] splitNameInput = nameInput.split("(?!^)");
-        ArrayList<Optional<MerchandiseItems>> sortedMatchedWords = new ArrayList<>();
+        ArrayList<MerchandiseItems> sortedMatchedWords = new ArrayList<>();
+        int maxItemsReturned = 3;
 
-        allItems.forEach(i -> {
+        List<MerchandiseItems> calledItems = UtilsFunctions.getCachedMerchItems();
+        if (calledItems == null || calledItems.isEmpty()) {
+            calledItems = merchandiseItemsRepository.findAll();
+        }
 
+        if (calledItems.isEmpty()) return sortedMatchedWords;
+
+        calledItems.forEach(i -> {
             if (nameInput.equalsIgnoreCase(i.getName()))
-                sortedMatchedWords.add(merchandiseItemsRepository.findById(i.getId()));
+                sortedMatchedWords.add(i);
 
             String[] itemSplit = i.getName().split("(?!^)");
 
@@ -61,7 +99,6 @@ public class MerchandiseItemsController {
             Arrays.stream(splitNameInput).forEach(inputLetter -> {
                 AtomicBoolean wasAlreadyPresent = new AtomicBoolean(false);
                 Arrays.stream(itemSplit).forEach(itemLetter -> {
-
                     if (inputLetter.equalsIgnoreCase(itemLetter) && !wasAlreadyPresent.get()) {
                         wasAlreadyPresent.set(true);
                         matchingLetters.getAndIncrement();
@@ -73,16 +110,20 @@ public class MerchandiseItemsController {
 
         AtomicInteger maxLetterMatch = new AtomicInteger(Collections.max(matchingWords.values()));
 
-        while (maxLetterMatch.get() != 0) {
+        AtomicInteger i = new AtomicInteger();
+
+        while (maxLetterMatch.get() != 0 && i.get() < maxItemsReturned) {
             matchingWords.forEach((id, numberOfMatches) -> {
-                if (numberOfMatches.equals(maxLetterMatch.get()) && !sortedMatchedWords.contains(merchandiseItemsRepository.findById(id))) {
-                    sortedMatchedWords.add(merchandiseItemsRepository.findById(id));
+                if (numberOfMatches.equals(maxLetterMatch.get()) && !sortedMatchedWords.contains(UtilsFunctions.findCachedMerchItemById(id))) {
+                    sortedMatchedWords.add(UtilsFunctions.findCachedMerchItemById(id));
+                    i.getAndIncrement();
                 }
             });
             maxLetterMatch.getAndDecrement();
         }
         return sortedMatchedWords;
     }
+
 
     @PutMapping("/put/{id}")
     public MerchandiseItems updateItem(@RequestBody MerchandiseItems newItem, @PathVariable Long id) {

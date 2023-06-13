@@ -4,13 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.rocmerchbackend.rocmerchbackend.email.EmailService;
 import com.rocmerchbackend.rocmerchbackend.exception.CouldNotFindItemById;
 import com.rocmerchbackend.rocmerchbackend.model.MerchItemInCart;
 import com.rocmerchbackend.rocmerchbackend.model.MerchandiseItems;
 import com.rocmerchbackend.rocmerchbackend.model.MerchandiseOrders;
 import com.rocmerchbackend.rocmerchbackend.repository.MerchItemInCartRepository;
 import com.rocmerchbackend.rocmerchbackend.repository.MerchandiseOrdersRepository;
-import com.rocmerchbackend.rocmerchbackend.service.GMailerService;
+//import com.rocmerchbackend.rocmerchbackend.service.GMailerService;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.cdi.Eager;
@@ -138,15 +139,29 @@ public class MerchandiseOrdersController {
         return "DANGEROUS METHOD SPOTTED. PLEASE UNCOMMENT CODE TO COMMIT TO THIS ACTION.";
     }
 
+    @Autowired
+    private EmailService emailService;
 
     @PostMapping("/send-email-for-order-id/{id}")
     public String sendEmail(@PathVariable Long id) throws Exception {
         var currOrder = getShoppingCartById(id);
-        var toAddressForOrder = currOrder.map(MerchandiseOrders::getEmailForOrder).orElseThrow(() -> new IllegalStateException("Order is null"));
-        var gMailer = new GMailerService();
-        gMailer.composeHtmlEmailTemplateFromMerchandiseOrder(currOrder.orElseThrow());
-        gMailer.sendEmail(gMailer.getEmailHeader(), gMailer.getEmailAsHtmlString(), toAddressForOrder);
-        return "Email successfully sent to "+toAddressForOrder;
+
+        if (currOrder.isEmpty())
+            return "it looks like there is no order for id: "
+                   + id
+                   + ". Why should we email someone who never ordered, bro?";
+
+        var toAddressForOrder = currOrder
+                .map(MerchandiseOrders::getEmailForOrder)
+                .orElseThrow(() -> new IllegalStateException(
+                        "Order for id: "
+                        + id
+                        + "is null. Why should we email someone who never ordered, bro?"
+                ));
+
+        emailService.composeHtmlEmailTemplateFromMerchandiseOrder(currOrder.orElseThrow());
+        emailService.sendEmail(emailService.getEmailHeader(), emailService.getEmailAsHtmlString(), toAddressForOrder);
+        return "Email successfully sent to "+currOrder.get().getNameForOrder()+"email address: " + toAddressForOrder+". Nice.";
     }
 }
 
