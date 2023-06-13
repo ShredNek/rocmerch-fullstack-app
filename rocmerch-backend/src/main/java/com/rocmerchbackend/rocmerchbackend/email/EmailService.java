@@ -25,6 +25,11 @@ public class EmailService {
     private final String FROM_ADDRESS = "danielleemusic98@Gmail.com";
 
     public void sendEmail(String subject, String userMessage, String toEmailAddress) throws MessagingException {
+        System.out.println(smtpHost);
+        System.out.println(smtpPort);
+        System.out.println(smtpUser);
+        System.out.println(smtpPass);
+
         //configure SMTP server details
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
