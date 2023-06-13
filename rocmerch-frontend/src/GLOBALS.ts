@@ -23,6 +23,10 @@ export interface MerchandiseOrderInterface {
   merchItemsInCart: MerchandiseItemWithQuantityInterface[]
 }
 
+const config = {
+  withCredentials: true,
+}
+
 export const NOTIFICATION_DURATION = 3000
 
 export const uppercaseFirstLetter = (word: string | string[]) => {
@@ -124,6 +128,6 @@ export async function getCategoryOfItems(category: string | string[]) {
   const url = `${
     import.meta.env.VITE_BACKEND_SERVER_ENDPOINT
   }/items/get-by-category/${category}`
-  const response = await axios.get(url)
+  const response = await axios.get(url, config)
   return response.data
 }
