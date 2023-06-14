@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { MerchandiseItemWithQuantityInterface} from '../GLOBALS'
+import { MerchandiseItemInterface} from '../GLOBALS'
 import CartSidebarVue from './CartSidebar.vue'
 import CategoriesDropdown from './CategoriesDropdown.vue'
 import SearchBar from './SearchBar.vue'
@@ -62,7 +62,7 @@ export default {
       searchBarDropdownString: 'search-bar-dropdown',
       searchBarButtonDropdownString: 'search-bar-button-dropdown',
       buttonDropdownString: 'dropdown-button',
-      itemsReturned: [] as MerchandiseItemWithQuantityInterface[],
+      itemsReturned: [] as MerchandiseItemInterface[],
     }
   },
   mounted() {
@@ -126,11 +126,11 @@ export default {
       }
     },
     handleLoadingItems() {
-      this.itemsReturned = [] as MerchandiseItemWithQuantityInterface[]
+      this.itemsReturned = [] as MerchandiseItemInterface[]
       this.isSearchBarOpen = true
     },
-    handleLoadedItems(items: MerchandiseItemWithQuantityInterface[]) {
-      this.itemsReturned = items as MerchandiseItemWithQuantityInterface[]
+    handleLoadedItems(items: MerchandiseItemInterface[]) {
+      this.itemsReturned = items as MerchandiseItemInterface[]
       this.isSearchBarOpen = true
     },
   },

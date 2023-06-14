@@ -1,16 +1,13 @@
 {
   "hosting": {
-    "public": "./dist",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "rewrites": [
-      {
-        "source": "/rocmerch-backend",
-        "run": {
-          "serviceId": "rocmerch-backend",
-          "region": "asia-east1",
-          "pinTag": true
-        }
-      }
-    ]
+    "source": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "frameworksBackend": {
+      "region": "asia-east1"
+    }
   }
 }
