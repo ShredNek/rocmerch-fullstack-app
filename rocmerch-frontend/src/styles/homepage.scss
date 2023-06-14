@@ -698,7 +698,17 @@ dialog {
     width: 100%;
     position: absolute;
     background: linear-gradient($main-dark, $main-dark-transparent);
+    background-color: none;
     z-index: 1;
+    transition: background-color 2s;
+
+    &.hidden {
+    background-color: black;
+
+    }
+    &.revealed {
+      background-color: none;
+      }
 
     h2 {
       display: flex;

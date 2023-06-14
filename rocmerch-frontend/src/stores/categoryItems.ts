@@ -12,9 +12,3 @@ export const useCategoryItemsStore = defineStore('categoryItems', {
     },
   },
 })
-
-/*
-
-1st store: save category of items
-
-*/

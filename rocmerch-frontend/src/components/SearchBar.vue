@@ -14,6 +14,7 @@
 import {
   getAllItemsThatMatchSearch,
   MerchandiseItemInterface,
+  whitespaceRegex
 } from '../GLOBALS'
 import { AxiosResponse } from 'axios'
 
@@ -45,6 +46,7 @@ export default (await import('vue')).defineComponent({
     },
     handleItemsWhenFinishedLoading() {
       this.isSearching = false
+      if (whitespaceRegex.test(this.searchInput)) this.allItems = {} as AxiosResponse<MerchandiseItemInterface, unknown>
       this.$emit('items-loaded', this.allItems?.data)
     },
     handleItemsToLoad() {

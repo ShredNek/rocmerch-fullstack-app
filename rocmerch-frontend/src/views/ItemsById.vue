@@ -61,7 +61,7 @@ import {
   MerchandiseItemWithQuantityInterface,
   uppercaseFirstLetter,
   NOTIFICATION_DURATION,
-  getCategoryOfItems
+  getItemById
 } from '../GLOBALS'
 
 export default (await import('vue')).defineComponent({
@@ -128,11 +128,7 @@ export default (await import('vue')).defineComponent({
       return categoryItemsStore.categoryItems.find((i) => i.id === currId)
     },
     async loadItemFromDatabase(currId: number) {
-      const response = await getCategoryOfItems(this.$route.params.categories)
-
-      this.merchItem = response.data.find(
-        (i: MerchandiseItemInterface) => i.id === currId
-      )
+      this.merchItem = await getItemById(currId)
     },
   },
   computed: {
@@ -143,6 +139,7 @@ export default (await import('vue')).defineComponent({
   },
   watch: {
     $route() {
+      this.merchItem = {} as MerchandiseItemInterface
       this.getSelectedItem()
     }
   }

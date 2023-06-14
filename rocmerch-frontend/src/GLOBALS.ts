@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios'
+import axios from 'axios'
 import { useUserCartAndDataStore } from './stores/userCartAndData'
 export interface MerchandiseItemInterface {
   id: number
@@ -23,13 +23,7 @@ export interface MerchandiseOrderInterface {
   merchItemsInCart: MerchandiseItemWithQuantityInterface[]
 }
 
-const config: AxiosRequestConfig = {
-  headers: {
-    'Access-Control-Allow-Origin': 'http://127.0.0.1:5173/',
-    'Access-Control-Allow-Headers': ' Content-Type',
-    'Access-Control-Max-Age': '86400',
-  },
-}
+export const whitespaceRegex = /^\s*$/
 
 export const NOTIFICATION_DURATION = 3000
 
@@ -132,6 +126,14 @@ export async function getCategoryOfItems(category: string | string[]) {
   const url = `${
     import.meta.env.VITE_BACKEND_SERVER_ENDPOINT
   }/items/get-by-category/${category}`
-  const response = await axios.get(url, config)
+  const response = await axios.get(url)
+  return response.data
+}
+
+export async function getItemById(id: number) {
+  const url = `${
+    import.meta.env.VITE_BACKEND_SERVER_ENDPOINT
+  }/items/get-by-id/${id}`
+  const response = await axios.get(url)
   return response.data
 }

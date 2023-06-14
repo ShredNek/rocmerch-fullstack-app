@@ -116,6 +116,7 @@ export default (await import('vue')).defineComponent({
     },
     async sendOrderAndEmail() {
       const orderId = await sendOrderAndReturnOrderId()
+      this.userCartAndData.wipeAllState()
       orderId ? sendEmail(orderId) : console.log("Order Id is null. Wtf?")
     }
   },

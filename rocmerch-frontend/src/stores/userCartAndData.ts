@@ -90,5 +90,12 @@ export const useUserCartAndDataStore = defineStore('userCartAndData', {
     storeEntireOrder(order: MerchandiseOrderInterface) {
       this.ENTIRE_ORDER = order
     },
+    wipeAllState() {
+      this.merchItemsInCart = [] as MerchandiseItemWithQuantityInterface[]
+      this.emailForOrder = ''
+      this.nameForOrder = ''
+      this.totalPrice = 0
+      this.ENTIRE_ORDER = {} as MerchandiseOrderInterface
+    },
   },
 })

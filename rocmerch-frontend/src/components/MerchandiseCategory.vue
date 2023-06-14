@@ -6,7 +6,9 @@
         <img
           type="image"
           :src="imageForCategory"
-          :altForCategory="altForCategory"/>
+          :altForCategory="altForCategory"
+          loading="lazy"
+          />
         </div>
     </div>
   </router-link>
