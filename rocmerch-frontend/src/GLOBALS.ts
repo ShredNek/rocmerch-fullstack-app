@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 import { useUserCartAndDataStore } from './stores/userCartAndData'
 export interface MerchandiseItemInterface {
   id: number
@@ -23,8 +23,12 @@ export interface MerchandiseOrderInterface {
   merchItemsInCart: MerchandiseItemWithQuantityInterface[]
 }
 
-const config = {
-  withCredentials: true,
+const config: AxiosRequestConfig = {
+  headers: {
+    'Access-Control-Allow-Origin': 'http://127.0.0.1:5173/',
+    'Access-Control-Allow-Headers': ' Content-Type',
+    'Access-Control-Max-Age': '86400',
+  },
 }
 
 export const NOTIFICATION_DURATION = 3000
