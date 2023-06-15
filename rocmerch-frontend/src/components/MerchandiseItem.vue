@@ -13,8 +13,7 @@
 <script lang="ts">
 import {
   MerchandiseItemInterface,
-  uppercaseFirstLetter,
-  generateDynamicUrl,
+  uppercaseFirstLetter
 } from '../GLOBALS'
 
 export default {
@@ -23,10 +22,9 @@ export default {
     item: { type: Object as () => MerchandiseItemInterface, required: true },
   },
   setup(props) {
-    const newItemImgPath = generateDynamicUrl(props.item, import.meta.url)
-
+    const newItemImgPath = new URL(`../assets/images/${props.item.image}`,import.meta.url).href
     return {
-      newItemImgPath,
+      newItemImgPath
     }
   },
   data() {
@@ -38,11 +36,6 @@ export default {
   mounted() {
     this.cappedItemName = uppercaseFirstLetter(this.item.name)
     this.individualItemRoute = `/item/${this.item.category}/${this.item.id}`
-  },
-  methods: {
-    handleDynamicUrl(item: MerchandiseItemInterface) {
-      return generateDynamicUrl(item, import.meta.url)
-    },
   },
 }
 </script>

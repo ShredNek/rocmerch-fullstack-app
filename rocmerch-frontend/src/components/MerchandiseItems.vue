@@ -28,10 +28,10 @@
 
 <script lang="ts">
 import MerchandiseCategory from './MerchandiseCategory.vue'
-import PickImage from '../assets/images/items/ROC_BlackPicks.jpg'
-import ToteImage from '../assets/images/items/ROC_BlackToteBag.jpg'
-import ShirtImage from '../assets/images/items/ROC_BlackTshirt.jpg'
-import VinylImage from '../assets/images/items/ROC_BlackVinyl.jpg'
+import PickImage from '../assets/images/ROC_BlackPicks.jpg'
+import ToteImage from '../assets/images/ROC_BlackToteBag.jpg'
+import ShirtImage from '../assets/images/ROC_BlackTshirt.jpg'
+import VinylImage from '../assets/images/ROC_BlackVinyl.jpg'
 export default {
   name: 'MerchandiseItems',
   components: { MerchandiseCategory },

@@ -23,6 +23,8 @@ export interface MerchandiseOrderInterface {
   merchItemsInCart: MerchandiseItemWithQuantityInterface[]
 }
 
+export const imageBaseUrl = '../assets/images/'
+
 export const whitespaceRegex = /^\s*$/
 
 export const NOTIFICATION_DURATION = 3000
@@ -63,12 +65,8 @@ export async function getAllItemsThatMatchSearch(query: string) {
   }
 }
 
-export function generateDynamicUrl(
-  item: MerchandiseItemInterface,
-  url: string
-) {
-  new URL(`/assets/images/items/${item.image}`, url).href
-  return `/assets/images/items/${item.image}`
+export function generateUrlAtBuild(itemImage: string, url: string) {
+  return new URL(`../assets/images/${itemImage}`, url).href
 }
 
 export function extractNumberFromString(string: string) {

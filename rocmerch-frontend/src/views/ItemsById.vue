@@ -2,7 +2,10 @@
   <section>
     <Header />
     <div class="shopping-section">
-      <div v-if="Object.keys(merchItem).length === 0" class="item-card-container">
+      <div
+        v-if="Object.keys(merchItem).length === 0"
+        class="item-card-container"
+      >
         <LoadingSpinner />
       </div>
       <div v-else class="individual-merchandise-item">
@@ -12,10 +15,7 @@
           :isOpen="isOpen"
         />
         <div class="image-container">
-          <img
-            :src="imageUrl"
-            :alt="`img for ${merchItem.name}`"
-          />
+          <img :src="imageUrl" :alt="`img for ${merchItem.name}`" />
         </div>
         <div class="item-details-container">
           <h2 class="section-header">{{ merchItem.name }}</h2>
@@ -61,7 +61,7 @@ import {
   MerchandiseItemWithQuantityInterface,
   uppercaseFirstLetter,
   NOTIFICATION_DURATION,
-  getItemById
+  getItemById,
 } from '../GLOBALS'
 
 export default (await import('vue')).defineComponent({
@@ -83,6 +83,11 @@ export default (await import('vue')).defineComponent({
       isOpen: false,
     }
   },
+  // async setup() {
+  //   await this.getSelectedItem()
+  //   this.merchItem.name = uppercaseFirstLetter(this.merchItem.name)
+  // }
+  // ,
   async mounted() {
     await this.getSelectedItem()
     this.merchItem.name = uppercaseFirstLetter(this.merchItem.name)
@@ -133,15 +138,17 @@ export default (await import('vue')).defineComponent({
   },
   computed: {
     imageUrl() {
-  return new URL(`../assets/images/items/${this.merchItem.image}`,import.meta.url).href
-
-    }
+      return new URL(
+        `../assets/images/${this.merchItem.image}`,
+        import.meta.url
+      ).href
+    },
   },
   watch: {
     $route() {
       this.merchItem = {} as MerchandiseItemInterface
       this.getSelectedItem()
-    }
-  }
+    },
+  },
 })
 </script>

@@ -15,7 +15,7 @@
         :to="`/item/${item.category}/${item.id}`"
       >
         <OrderSummaryItem
-          :itemImage="handleDynamicUrl(item)"
+          :itemImage="item.image"
           :itemIndividualPrice="item.price"
           :itemName="item.name"
         />
@@ -28,7 +28,7 @@
 import OrderSummaryItem from '../components/OrderSummaryItem.vue'
 import LoadingSpinner from './LoadingSpinner.vue'
 import { PropType } from 'vue'
-import { generateDynamicUrl, MerchandiseItemInterface } from '../GLOBALS'
+import { MerchandiseItemInterface } from '../GLOBALS'
 
 export default (await import('vue')).defineComponent({
   name: 'SearchResultsDropdown',
@@ -48,11 +48,7 @@ export default (await import('vue')).defineComponent({
       required: false,
     },
   },
-  methods: {
-    handleDynamicUrl(item: MerchandiseItemInterface) {
-      return generateDynamicUrl(item,import.meta.url)
-    },
-  },
+  
   watch: {
     searchResults(n) {
       console.log(n)

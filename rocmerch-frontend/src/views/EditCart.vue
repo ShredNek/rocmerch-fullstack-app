@@ -11,10 +11,6 @@
         v-for="item in userCart.merchItemsInCart"
         :key="item.merchandiseItem.id"
         :item="item"
-        :itemImage="handleDynamicUrl(item.merchandiseItem)"
-        :itemIndividualPrice="item.merchandiseItem.price"
-        :itemName="item.merchandiseItem.name"
-        :itemQuantity="item.quantity"
         :editAndRemoveSelfControls="true"
       />
     </div>
@@ -42,7 +38,7 @@ import LoadingSpinner from '../components/LoadingSpinner.vue'
 import OrderSummaryItem from '../components/OrderSummaryItem.vue'
 import ReactiveQuantityButton from '../components/ReactiveQuantityButton.vue'
 import { useUserCartAndDataStore } from '../stores/userCartAndData'
-import {MerchandiseItemInterface, generateDynamicUrl} from '../GLOBALS'
+import {MerchandiseItemInterface, generateUrlAtBuild} from '../GLOBALS'
 
 export default (await import('vue')).defineComponent({
   name: 'EditCart',
@@ -68,7 +64,7 @@ export default (await import('vue')).defineComponent({
   },
   methods: {
     handleDynamicUrl(item: MerchandiseItemInterface) {
-      return generateDynamicUrl(item,import.meta.url)
+      return generateUrlAtBuild(item.image,import.meta.url)
     },
   }
 })

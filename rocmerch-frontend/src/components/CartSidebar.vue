@@ -18,27 +18,12 @@
         </div>
         <div v-else-if="currentCart.merchItemsInCart.length > 0">
           <div
-            v-for="miin in currentCart.merchItemsInCart"
-            :key="miin.merchandiseItem.id"
+            v-for="itemInCart in currentCart.merchItemsInCart"
+            :key="itemInCart.merchandiseItem.id"
             class="item"
           >
-            <div class="img-and-item-name">
-              <div class="image-container">
-                <img :src="handleDynamicUrl(miin.merchandiseItem)" alt="" />
-              </div>
-              <h4>{{ miin.merchandiseItem.name }}</h4>
-            </div>
-            <div class="price-quantity-drop-item">
-              <p class="price">${{ miin.merchandiseItem.price }}</p>
-              <p class="quantity">{{ miin.quantity }}</p>
-              <button
-                class="close-button"
-                @click="deleteItemFromCart(miin.merchandiseItem.id)"
-              >
-                <v-icon class="v-icon" icon="fa-solid fa-xmark" />
-              </button>
-            </div>
-          </div>
+          <CartSidebarChild :merchItem="itemInCart"/>
+        </div>
         </div>
       </div>
       <div class="cart-details">
@@ -60,22 +45,24 @@
 </template>
 
 <script lang="ts">
-import {  MerchandiseOrderInterface, generateDynamicUrl, MerchandiseItemInterface } from '../GLOBALS'
+import {  MerchandiseOrderInterface } from '../GLOBALS'
 import { useUserCartAndDataStore } from '../stores/userCartAndData'
 import ReactiveQuantityButton from './ReactiveQuantityButton.vue'
+import CartSidebarChild from './CartSidebarChild.vue'
 import { useRouter } from 'vue-router'
 
 export default (await import('vue')).defineComponent({
-  namne: 'CartSidebar',
+  name: 'CartSidebar',
   components: {
     ReactiveQuantityButton,
+    CartSidebarChild
   },
   props: {
     isOpen: { type: Boolean, required: true },
   },
   setup() {
     const router = useRouter()
-    return { router }
+    return { router}
   },
   data() {
     return {
@@ -123,9 +110,6 @@ export default (await import('vue')).defineComponent({
     handlePayNowClick() {
       this.router.push('/checkout/user')
     },
-    handleDynamicUrl(item: MerchandiseItemInterface) {
-      return generateDynamicUrl(item, import.meta.url)
-    }
   },
   watch: {
     isOpen: {

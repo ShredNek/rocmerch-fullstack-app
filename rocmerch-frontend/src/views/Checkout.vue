@@ -22,17 +22,14 @@
       <h2>Order Summary</h2>
       <div class="items">
         <OrderSummaryItemVue
-          v-for="item in reactiveCartData.merchItemsInCart"
+          v-for="item in staticCartData.merchItemsInCart"
           :key="item.merchandiseItem.id"
-          :itemImage="handleDynamicUrl(item.merchandiseItem)"
-          :itemIndividualPrice="item.merchandiseItem.price"
-          :itemName="item.merchandiseItem.name"
-          :itemQuantity="item.quantity"
+          :item="item"
         />
       </div>
       <div class="subtotal">
         <h3>Subtotal</h3>
-        <h3>${{ reactiveCartData.totalPrice }}</h3>
+        <h3>${{ staticCartData.totalPrice }}</h3>
       </div>
       <div class="shipping">
         <div>
@@ -43,7 +40,7 @@
       </div>
       <div class="total">
         <h3>Total</h3>
-        <h2>${{ reactiveCartData.totalPrice }}</h2>
+        <h2>${{ staticCartData.totalPrice }}</h2>
       </div>
       <router-link to="/">
         <button class="resume red-glow animated">Resume Shopping</button>
@@ -65,9 +62,9 @@ import { useUserCartAndDataStore } from '../stores/userCartAndData'
 import {
   MerchandiseItemInterface,
   MerchandiseOrderInterface,
-  generateDynamicUrl,
+  generateUrlAtBuild,
   sendOrderAndReturnOrderId,
-  sendEmail
+  sendEmail,
 } from '../GLOBALS'
 
 export default (await import('vue')).defineComponent({
@@ -81,9 +78,11 @@ export default (await import('vue')).defineComponent({
   },
   mounted() {
     this.userCartAndData.totalPrice = this.userCartAndData.calculateTotalPrice()
+    this.staticCartData.merchItemsInCart = this.userCartAndData.merchItemsInCart
+    this.staticCartData.totalPrice = this.userCartAndData.totalPrice
   },
   data() {
-    return { isUserInputInvalid: false}
+    return { isUserInputInvalid: false, staticCartData: {} as MerchandiseOrderInterface }
   },
   computed: {
     userCartAndData() {
@@ -98,7 +97,7 @@ export default (await import('vue')).defineComponent({
   },
   methods: {
     handleDynamicUrl(item: MerchandiseItemInterface) {
-      return generateDynamicUrl(item, import.meta.url)
+      return generateUrlAtBuild(item.image, import.meta.url)
     },
     assignOrder(userDetails: { [key: string]: string }) {
       const computedNameForOrder: string =
@@ -117,8 +116,8 @@ export default (await import('vue')).defineComponent({
     async sendOrderAndEmail() {
       const orderId = await sendOrderAndReturnOrderId()
       this.userCartAndData.wipeAllState()
-      orderId ? sendEmail(orderId) : console.log("Order Id is null. Wtf?")
-    }
+      orderId ? sendEmail(orderId) : console.log('Order Id is null. Wtf?')
+    },
   },
 })
 </script>
