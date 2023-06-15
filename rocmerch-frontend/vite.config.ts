@@ -14,11 +14,9 @@ export default defineConfig({
       },
     }),
   ],
-  optimizeDeps: {
-    include: ['@ffmpeg/ffmpeg', 'src/assets/videos/VisualiserEdited_D1.mov'],
-  },
-  assetsInclude: ['**/*.mov'],
+  assetsInclude: ['**/*.mov', '**/*.jpg'],
   build: {
     target: 'esnext',
   },
+  appType: 'mpa',
 })

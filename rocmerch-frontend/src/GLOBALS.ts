@@ -65,9 +65,10 @@ export async function getAllItemsThatMatchSearch(query: string) {
 
 export function generateDynamicUrl(
   item: MerchandiseItemInterface,
-  currUrl: string
+  url: string
 ) {
-  return new URL(`../assets/images/items/${item.image}`, currUrl).href
+  new URL(`/assets/images/items/${item.image}`, url).href
+  return `/assets/images/items/${item.image}`
 }
 
 export function extractNumberFromString(string: string) {

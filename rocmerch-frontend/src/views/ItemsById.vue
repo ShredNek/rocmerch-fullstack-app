@@ -133,7 +133,7 @@ export default (await import('vue')).defineComponent({
   },
   computed: {
     imageUrl() {
-  return new URL(`../assets/images/items/${this.merchItem.image}`, import.meta.url).href
+  return new URL(`../assets/images/items/${this.merchItem.image}`,import.meta.url).href
 
     }
   },

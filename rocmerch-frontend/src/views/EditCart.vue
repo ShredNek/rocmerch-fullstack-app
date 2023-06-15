@@ -68,7 +68,7 @@ export default (await import('vue')).defineComponent({
   },
   methods: {
     handleDynamicUrl(item: MerchandiseItemInterface) {
-      return generateDynamicUrl(item, import.meta.url)
+      return generateDynamicUrl(item,import.meta.url)
     },
   }
 })
