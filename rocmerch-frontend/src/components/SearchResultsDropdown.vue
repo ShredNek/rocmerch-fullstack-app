@@ -54,11 +54,11 @@ export default (await import('vue')).defineComponent({
         this.searchError = true
       }
       this.searchError = false
-      console.clear()
+      // console.clear()
     },
   },
   mounted() {
-    console.clear()
+    // console.clear()
   },
 })
 </script>
