@@ -3,3 +3,22 @@
 The source code for my Java/MySQL/SpringBoot/Vue full-stack application
 
 If you cloned in, I hope you enjoy your stay :)
+
+??? WHAT TO INSTALL ???
+
+Main Tech
+
+MySQL
+Java (v17)
+Vue
+
+??? WHAT YOU WANT TO DEV ???
+
+1. FE only
+2. BE only
+3. ENTIRE APP
+
+### FE only ###
+
+If you want to use only the front end, then the only thing you will need to know is
+the url endpoint to contact the server from, as it is not included in git.

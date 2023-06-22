@@ -14,10 +14,8 @@
         :key="item.id"
         :to="`/item/${item.category}/${item.id}`"
       >
-        <OrderSummaryItem
-          :itemImage="item.image"
-          :itemIndividualPrice="item.price"
-          :itemName="item.name"
+        <SearchResultDropdownChild
+        :item="item"
         />
       </router-link>
     </div>
@@ -25,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import OrderSummaryItem from '../components/OrderSummaryItem.vue'
+import SearchResultDropdownChild from './SearchResultDropdownChild.vue'
 import LoadingSpinner from './LoadingSpinner.vue'
 import { PropType } from 'vue'
 import { MerchandiseItemInterface } from '../GLOBALS'
@@ -33,8 +31,8 @@ import { MerchandiseItemInterface } from '../GLOBALS'
 export default (await import('vue')).defineComponent({
   name: 'SearchResultsDropdown',
   components: {
-    OrderSummaryItem,
     LoadingSpinner,
+    SearchResultDropdownChild
   },
   data() {
     return {

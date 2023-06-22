@@ -68,6 +68,12 @@ img {
   pointer-events: none;
 }
 
+video::-webkit-media-controls, 
+::-webkit-media-controls {
+  display:none !important;
+  pointer-events: none !important;
+}
+
 a {
   color: inherit;
   text-decoration: none;
