@@ -1,11 +1,10 @@
 HELP.md
-target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
 ### APPLICATION PROPERTIES ###
 application-dev.properties
-secret-dev.YAML
+**/application-dev.properties
 
 ### STS ###
 .apt_generated
@@ -17,7 +16,7 @@ secret-dev.YAML
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
+**/.idea
 *.iws
 *.iml
 *.ipr
