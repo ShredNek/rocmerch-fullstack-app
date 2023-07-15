@@ -68,9 +68,9 @@ img {
   pointer-events: none;
 }
 
-video::-webkit-media-controls, 
+video::-webkit-media-controls,
 ::-webkit-media-controls {
-  display:none !important;
+  display: none !important;
   pointer-events: none !important;
 }
 
@@ -546,7 +546,7 @@ dialog {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 150px;
+    min-height: 150px;
 
     div {
       margin: 0;
@@ -554,18 +554,14 @@ dialog {
   }
 
   @keyframes color-fade {
-    0%, 100% {color: white;}
+    0%,
+    100% {
+      color: white;
+    }
 
-    50% {color: $main-grey;}
-  }
-
-  .loading-notice {
-    text-align: center;
-    padding: 0 2em 2em;
-    color: white;
-    font-style: italic;
-    letter-spacing: .1em;
-    animation: color-fade 5s infinite ease-in-out 2s;
+    50% {
+      color: $main-grey;
+    }
   }
 
   .items {
@@ -713,12 +709,11 @@ dialog {
     transition: background-color 2s;
 
     &.hidden {
-    background-color: black;
-
+      background-color: black;
     }
     &.revealed {
       background-color: none;
-      }
+    }
 
     h2 {
       display: flex;
@@ -963,6 +958,27 @@ h2.section-header {
 // ? ? ? ? ? ? ? ? ? ? ? ? ? ?
 // ? Loading Spinner Styles ?
 // ? ? ? ? ? ? ? ? ? ? ? ? ?
+
+.loading-parent {
+  display: flex;
+  flex-direction: column;
+  min-height: fit-content;
+  padding: 2rem;
+
+  .loading-spinner {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.loading-notice {
+  text-align: center;
+  padding: 0 2em 2em;
+  color: white;
+  font-style: italic;
+  letter-spacing: 0.1em;
+  animation: color-fade 7s infinite ease-in-out 2s;
+}
 
 .loading-spinner {
   margin: 2rem 0 4rem;
@@ -1494,15 +1510,15 @@ $feedback-left: 10%;
 // ? ? ? ? ? ? ? ? ? ? ? ? ?
 
 #page-not-found {
-    background: white;
-    padding: 2em 4em;
-    text-align: center;
+  background: white;
+  padding: 2em 4em;
+  text-align: center;
 
- h1 {
-  font-weight: 700;
- }
+  h1 {
+    font-weight: 700;
+  }
 
- h2 {
-  font-size: 1em;
- }
+  h2 {
+    font-size: 1em;
+  }
 }

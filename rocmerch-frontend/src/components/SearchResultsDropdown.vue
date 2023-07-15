@@ -6,7 +6,7 @@
     <div class="items">
       <div v-if="searchError || (searchResults && searchResults.length === 0)">
         <LoadingSpinner class="loading" />
-        <p class="loading-notice">Searching the database... <br/> the first call may take up to 20 seconds.</p>
+        <!-- <p class="loading-notice">Searching the database... <br/> as this is a student project, the database has probably spun down, and will take 3 mins to warm up. Thank you for your patience</p> -->
       </div>
       <router-link
         v-else-if="searchResults && searchResults.length >= 1"
